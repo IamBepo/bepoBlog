@@ -1,10 +1,22 @@
 <template>
-  <el-carousel :interval="5000" arrow="always">
-    <el-carousel-item v-for="item in 4" :key="item">
-      <h3 text="2xl" justify="center">{{ item }}</h3>
+  <el-carousel :interval="5000" arrow="hover" v-if="list">
+    <el-carousel-item v-for="(item,index) in list" :key="index">
+      <div style="text-align: center;height: 100%;">
+        <img :src="item.cover" style="height:100%"/>
+      </div>
+      <h3 text="2xl" justify="center">{{ item.title }}</h3>
     </el-carousel-item>
   </el-carousel>
 </template>
+
+<script setup>
+
+  defineProps({
+    list:Object
+  })
+
+</script>
+
 
 <style scoped>
 .el-carousel__item h3 {

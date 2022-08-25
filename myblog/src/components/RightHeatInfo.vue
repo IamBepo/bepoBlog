@@ -7,9 +7,9 @@
         </div>
 
         <div style="margin-top: 10px;">
-            <div class="content" style="display: flex;align-items: center;margin: 5px 0;" v-for="(item,index) in heatData" :key="index" @click="heatFun(item.title)">
+            <div class="content" style="display: flex;align-items: center;margin: 5px 0;" v-for="(item,index) in list" :key="index" @click="heatFun(item.id)">
                 <div style="margin-right: 10px;height: 60px;">
-                    <img style="width: 80px;height: 60px;" :src="item.imgurl"/>
+                    <img style="width: 80px;height: 60px;" :src="item.cover"/>
                 </div>
                 <div class="textS">
                     {{item.title}}
@@ -21,26 +21,19 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
+import {useRouter} from 'vue-router'
+    let router = useRouter()
 
+    defineProps({
+        list:Object
+    })
 
-let heatData = ref([
-    {
-        title: '《Nigella靓太拿手菜》EP05 - 焦糖布甸 辣酱意大利粉 番茄酱肉丸配羽衣甘蓝薯茸',
-        imgurl: 'http://up.llxuo.top/autospoofingAPP/c3af8ce6-7c52-48b8-8059-b7162e5cdffe.jpg'
-    },
-    {
-        title: '《Nigella靓太拿手菜》EP05 - 焦糖布甸 辣酱意大利粉 番茄酱肉丸配羽衣甘蓝薯茸',
-        imgurl: 'http://up.llxuo.top/autospoofingAPP/c3af8ce6-7c52-48b8-8059-b7162e5cdffe.jpg'
-    },
-    {
-        title: 'springboot啊啊啊',
-        imgurl: 'http://up.llxuo.top/autospoofingAPP/c3af8ce6-7c52-48b8-8059-b7162e5cdffe.jpg'
+    function heatFun(value) {
+        let routeUrl = router.resolve({
+            path: `/read/${value}`
+        })
+        window.open(routeUrl.href, '_blank');
     }
-])
-
-function heatFun(value) {
-    console.log(value + "被点击")
-}
 
 </script>
 

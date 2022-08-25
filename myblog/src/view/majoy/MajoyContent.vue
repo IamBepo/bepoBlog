@@ -2,7 +2,7 @@
     <div class="Container">
         <div class="LContainer">
             <div style="margin:0 0 10px 0;">
-                <TopSwiper></TopSwiper>
+                <TopSwiper :list="walkRecommendList"></TopSwiper>
             </div>
             <div>
                 <Propagate></Propagate>
@@ -25,7 +25,7 @@
             </div>
             <div style="padding-top: 10px;">
                 <RightOtherInfo :list="tabList"></RightOtherInfo>
-                <RightHeatInfo></RightHeatInfo>
+                <RightHeatInfo :list="listRecommendList"></RightHeatInfo>
                 <RightNewComment :list="newCommentList"></RightNewComment>
             </div>
         </div>
@@ -48,6 +48,8 @@ import { ElMessage } from 'element-plus'
     let articleList = ref()
     let tabList = ref()
     let newCommentList = ref()
+    let listRecommendList = ref()
+    let walkRecommendList = ref()
 
     function listArticle(){
         axios({
@@ -111,10 +113,55 @@ import { ElMessage } from 'element-plus'
             })
         })
     }
+
+    function listListRecommend(){
+        axios({
+            url:'/recommend/list/all/list',
+            method:'GET'
+        }).then(res => {
+            if(res.data.code === '200'){
+                listRecommendList.value = res.data.data
+            }else{
+                ElMessage({
+                    message: '网络似乎出现了问题.',
+                    type: 'error',
+                })
+            }
+        }).catch(error =>{
+            ElMessage({
+                message: '网络似乎出现了问题.',
+                type: 'error',
+            })
+        })
+    }
+
+    function listWalkRecommend(){
+        axios({
+            url:'/recommend/list/all/walk',
+            method:'GET'
+        }).then(res => {
+            if(res.data.code === '200'){
+                walkRecommendList.value = res.data.data
+            }else{
+                ElMessage({
+                    message: '网络似乎出现了问题.',
+                    type: 'error',
+                })
+            }
+        }).catch(error =>{
+            ElMessage({
+                message: '网络似乎出现了问题.',
+                type: 'error',
+            })
+        })
+    }
+
     onMounted:{
         listArticle()
         listTab()
         listNewComment()
+        listListRecommend()
+        listWalkRecommend()
     }
 
 </script>

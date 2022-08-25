@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.myblogsystem.mapper.BlogRecommendMapper">
+
+    <resultMap id="BaseResultMap" type="com.blog.myblogsystem.pojo.dto.BlogRecommendDTO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="bodyId" column="body_id" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="level" column="level" jdbcType="VARCHAR"/>
+            <result property="power" column="power" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,body_id,status,
+        level,power
+    </sql>
+
+    <select id="listListRecommend" resultType="blogListRecommendVO">
+        SELECT B.id,A.id as recommend_id,B.title,A.power,C.url as cover
+        FROM `blog_recommend` as A,`blog_body` as B,`blog_cover` as C
+        where A.body_id = B.id and B.cover_id = C.id and A.`level` = 'ONLY_RECOMMEND_LIST'
+    </select>
+
+    <select id="listWalkRecommend" resultType="blogWalkRecommendVO">
+        SELECT B.id,A.id as recommend_id,B.title,A.power,C.url as cover
+        FROM `blog_recommend` as A,`blog_body` as B,`blog_cover` as C
+        where A.body_id = B.id and B.cover_id = C.id and A.`level` = 'ONLY_RECOMMEND_WALK'
+    </select>
+</mapper>
