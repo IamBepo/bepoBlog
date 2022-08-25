@@ -1,0 +1,16 @@
+{
+  "id": "3563229",
+  "name": "blog",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5054873",
+      "name": "咖啡",
+      "font_class": "kafei",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    }
+  ]
+}

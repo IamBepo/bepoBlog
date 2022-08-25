@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.myblogsystem.mapper.BlogBodyMapper">
+
+    <resultMap id="BaseResultMap" type="com.blog.myblogsystem.pojo.dto.BlogBodyDTO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="coverId" column="cover_id" jdbcType="INTEGER"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="sortId" column="sort_id" jdbcType="INTEGER"/>
+            <result property="tabId" column="tab_id" jdbcType="VARCHAR"/>
+            <result property="viewCount" column="view_count" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="topStatus" column="top_status" jdbcType="INTEGER"/>
+            <result property="recommendStatus" column="recommend_status" jdbcType="INTEGER"/>
+            <result property="commentStatus" column="comment_status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,cover_id,
+        content,update_time,sort_id,
+        tab_id,view_count,status,
+        top_status,recommend_status,comment_status
+    </sql>
+
+    <select id="listArticleManage" resultType="blogArticleManageVO">
+        select A.id,A.update_time,A.title,B.name as sort_name,A.view_count,A.comment_count,A.status,A.top_status,A.recommend_status,A.comment_status
+        from `blog_body` as A,`blog_sort` as B
+        where A.deleted != 1 and A.sort_id = B.id
+        order by A.id desc
+    </select>
+
+    <select id="listArticleManageBySearch" resultType="blogArticleManageVO" parameterType="string">
+        select A.id,A.update_time,A.title,B.name as sort_name,A.view_count,A.comment_count,A.status,A.top_status,A.recommend_status,A.comment_status
+        from `blog_body` as A,`blog_sort` as B
+        where A.deleted != 1 and A.sort_id = B.id and A.title like "%" #{content} "%"
+        order by A.id desc
+    </select>
+
+    <select id="listArticleHomeBaseInfo" resultType="blogAritcleHomeVO">
+        SELECT A.id,A.title,B.name as sort_name,C.url as blog_cover,A.tab_id as blog_tab_id,A.update_time,A.view_count,A.comment_count,A.`status`,A.top_status
+        FROM `blog_body` as A,`blog_sort` as B,`blog_cover` as C
+        where A.sort_id = B.id and A.cover_id = C.id
+        order by A.id desc
+    </select>
+
+    <select id="listArticleDetail" resultType="blogArticleDetailVO" parameterType="int">
+        SELECT A.id,A.title,B.name as sort_name,A.tab_id as blog_tab_id,A.update_time,A.view_count,A.comment_count,A.content_id
+        FROM `blog_body` as A,`blog_sort` as B
+        where A.sort_id = B.id and A.id = #{id}
+    </select>
+</mapper>

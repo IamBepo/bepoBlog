@@ -1,0 +1,52 @@
+server:
+  port: 7777
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    #druid
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://sh-cynosdbmysql-grp-j2y4yak0.sql.tencentcdb.com:24444/blog?useSSL=true&characterEncoding=UTF-8&useUnicode=true&serverTimezone=GMT%2B8
+      username: root
+      password: 11321312aA
+      initial-size: 10 #初始化连接数
+      min-idle: 10 #最小
+      max-wait: 2500
+      max-active: 20 #最大
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      filter:
+        stat:
+          enabled: true
+          merge-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+    servlet:
+      load-on-startup: 1
+
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 20MB
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.blog.myblogsystem.pojo.dto,com.blog.myblogsystem.pojo.vo
+  global-config:
+    db-config:
+      id-type: auto   #idkey auto up
+  configuration:
+    map-underscore-to-camel-case: true  #a_d aD
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+
+#七牛云
+qiniu:
+  accessKey: 87FqJZUZKqirv7b8k2trW7G0ejRmOtk8K1UZFcpE
+  accessSecretKey: YBBjPWgDCaXY488E0yb2rkCeE2oCP8IkBsSYHVc9
+  url: http://up.llxuo.top/
+  bucket: biubiucomic
+  catalogue: myblog/coverImg/

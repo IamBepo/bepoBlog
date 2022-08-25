@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.myblogsystem.mapper.BlogCommentMapper">
+    <sql id="Second_Base_Column_List">
+        id,first_id,user_id,reply_user_id,
+        content,update_time,deleted,type
+    </sql>
+
+    <select id="getFirstCommentByArticleId" parameterType="integer" resultType="blogCommentVO">
+        select id,user_id,content,update_time
+        from `blog_comment_first`
+        where deleted = 0 and article_id = #{id}
+    </select>
+
+    <select id="getSecondCommentByFirstId" parameterType="integer" resultType="blogSecondCommentVO">
+        select <include refid="Second_Base_Column_List"></include>
+        from `blog_comment_second`
+        where deleted = 0 and first_id = #{id}
+    </select>
+
+    <select id="listNewComment" resultType="blogNewCommentVO">
+        select A.id,A.article_id,B.title,A.user_id,A.content,A.update_time
+        from `blog_comment_first` as A,`blog_body` as B
+        where A.deleted = 0 and A.article_id = B.id
+        limit 5
+    </select>
+</mapper>
