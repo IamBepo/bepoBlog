@@ -10,6 +10,10 @@ import ArticleMajor from '../view/admin/manage/Article/ArticleSubpageManage/Majo
 import ArticleAdd from '../view/admin/manage/Article/ArticleSubpageManage/AddArticle.vue'
 import ClassManage from '../view/admin/manage/Article/ClassManage.vue'
 import RecommendManage from '../view/admin/manage/Article/RecommendManage.vue'
+import CommentManage from '../view/admin/manage/Article/CommentManage.vue'
+import BasicSetting from '../view/admin/manage/system/BasicSetting.vue'
+import UserList from '../view/admin/manage/user/UserList.vue'
+import VisitHistory from '../view/admin/manage/user/VisitHistory.vue'
 import NotFind from '../view/404/404.vue'
 import ReadModel from '../view/read/ReadModel.vue'
 const router = createRouter({
@@ -49,7 +53,7 @@ const router = createRouter({
             children:[
                 {
                     path:'/admin',
-                    name:'welcome',
+                    name:'admin',
                     component:Welcome
                 },
                 {
@@ -84,6 +88,26 @@ const router = createRouter({
                     path:'recommendManage', 
                     name:'recommendManage',
                     component:RecommendManage
+                },
+                {
+                    path:'commentManage',
+                    name:'commentManage',
+                    component:CommentManage
+                },
+                {
+                    path:'basicSetting',
+                    name:'basicSetting',
+                    component:BasicSetting
+                },
+                {
+                    path:'userList',
+                    name:'userList',
+                    component:UserList
+                },
+                {
+                    path:'visitHistory',
+                    name:'visitHistory',
+                    component:VisitHistory
                 }
             ]
         },
