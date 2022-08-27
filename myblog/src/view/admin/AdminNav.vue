@@ -26,7 +26,7 @@
 
         <el-sub-menu v-for="item in userList" :index="item.name">
             <template #title>
-                <el-icon><DataBoard /></el-icon>
+                <el-icon><User /></el-icon>
                 <span>{{item.label}}</span>
             </template>
             <el-menu-item-group style="background-color: #76797c;" v-for="cItem in item.cList">
@@ -36,7 +36,7 @@
 
         <el-sub-menu v-for="item in systemList" :index="item.name">
             <template #title>
-                <el-icon><DataBoard /></el-icon>
+                <el-icon><Setting /></el-icon>
                 <span>{{item.label}}</span>
             </template>
             <el-menu-item-group style="background-color: #76797c;" v-for="cItem in item.cList">
@@ -90,6 +90,10 @@ import {useRoute,useRouter} from 'vue-router'
                 {
                     label:'基本设置',
                     name:'basicSetting'
+                },
+                {
+                    label:'友情链接',
+                    name:'friendLink'
                 }
             ]
         }

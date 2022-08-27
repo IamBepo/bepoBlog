@@ -9,6 +9,16 @@ export default createStore({
     coverUrl:'',
     tabSelectVisble:false,
     tabSelected:'',
+    systemInfo:{
+      webTitle:'',
+      webLogo:'',
+      navTitle:'',
+      aboutBlogger:'',
+      underIntroduction:'',
+      underPoweredBy:'',
+      underCopyright:'',
+      underIcp:''
+    },
   },
   mutations: {
     loginVisbleJudge(state,value){
@@ -38,7 +48,10 @@ export default createStore({
           state.tabSelected[i].selected = false
         }
       }
-    }
+    },
+    getSystemInfo(state,value){
+      state.systemInfo = value
+    },
   },
   actions: {
 

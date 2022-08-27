@@ -3,6 +3,7 @@ import { onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
   const store = useStore()
+  
   onMounted:{
     let isLogin = localStorage.getItem('token')
     if(isLogin !=='null' && isLogin){

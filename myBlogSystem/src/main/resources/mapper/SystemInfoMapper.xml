@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.myblogsystem.mapper.SystemInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.blog.myblogsystem.pojo.dto.SystemInfoDTO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="webTitle" column="web_title" jdbcType="VARCHAR"/>
+            <result property="webLogo" column="web_logo" jdbcType="VARCHAR"/>
+            <result property="navTitle" column="nav_title" jdbcType="VARCHAR"/>
+            <result property="aboutBlogger" column="about_blogger" jdbcType="VARCHAR"/>
+            <result property="underIntroduction" column="under_introduction" jdbcType="VARCHAR"/>
+            <result property="underPoweredBy" column="under_powered_by" jdbcType="VARCHAR"/>
+            <result property="underCopyright" column="under_copyright" jdbcType="VARCHAR"/>
+            <result property="underIco" column="under_ico" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,web_title,web_logo,
+        nav_title,about_blogger,under_introduction,
+        under_powered_by,under_copyright,under_ico
+    </sql>
+</mapper>

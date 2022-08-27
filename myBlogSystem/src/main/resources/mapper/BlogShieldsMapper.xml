@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.myblogsystem.mapper.BlogShieldsMapper">
+
+    <resultMap id="BaseResultMap" type="com.blog.myblogsystem.pojo.dto.BlogShieldsDTO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="shieldsUrl" column="shields_url" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,shields_url,url,
+        deleted
+    </sql>
+</mapper>

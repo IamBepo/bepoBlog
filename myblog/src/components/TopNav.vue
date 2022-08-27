@@ -2,10 +2,10 @@
     <div class="container">
         <div class="lContainer">
             <div class="imgContainer">
-                <img src="../assets/logo.png" />
+                <img :src="$store.state.systemInfo.webLogo" />
             </div>
             <div style="padding-left: 10px;font-size: 20px;">
-                Bepo的小屋
+                {{$store.state.systemInfo.navTitle}}
             </div>
             <div style="padding-left: 50px;display: flex;align-items: center;height: 100%;">
                 <el-menu :default-active="activedMenu" class="el-menu-demo" mode="horizontal" @select="handleSelect"

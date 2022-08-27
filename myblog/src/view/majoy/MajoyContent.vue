@@ -21,7 +21,7 @@
         </div>
         <div class="RContainer">
             <div>
-                <RightBloggerInfo></RightBloggerInfo>
+                <RightBloggerInfo :list="shieldsList"></RightBloggerInfo>
             </div>
             <div style="padding-top: 10px;">
                 <RightOtherInfo :list="tabList"></RightOtherInfo>
@@ -43,6 +43,7 @@ import TopSwiper from '../../components/TopSwiper.vue';
 import RightNewComment from '../../components/RightNewComment.vue';
 import { inject, onMounted, ref } from '@vue/runtime-core';
 import { ElMessage } from 'element-plus'
+import store from '../../store'
 
     const axios = inject('$axios')
     let articleList = ref()
@@ -50,6 +51,7 @@ import { ElMessage } from 'element-plus'
     let newCommentList = ref()
     let listRecommendList = ref()
     let walkRecommendList = ref()
+    let shieldsList = ref()
 
     function listArticle(){
         axios({
@@ -156,12 +158,25 @@ import { ElMessage } from 'element-plus'
         })
     }
 
+    function listShields(){
+        axios({
+            url: '/system/list/shields',
+            method: 'GET'
+        }).then(res => {
+            if (res.data.code === '200') {
+                shieldsList.value = res.data.data
+            }
+        })
+    }
+
+
     onMounted:{
         listArticle()
         listTab()
         listNewComment()
         listListRecommend()
         listWalkRecommend()
+        listShields()
     }
 
 </script>

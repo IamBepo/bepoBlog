@@ -19,35 +19,17 @@
         </div>
         <el-divider />
         <div class="refBox">
-            <a :href="item.aU" v-for="(item,index) in imgurl" :key="index" style="margin-bottom: 5px;" target="_blank">
-                <img :src="item.imgU" />
+            <a :href="item.url" v-for="(item,index) in list" :key="index" style="margin-bottom: 5px;" target="_blank">
+                <img :src="item.shieldsUrl" />
                 <br /></a>
         </div>
     </div>
 </template>
 
-<script>
-export default {
-    name:'RightBloggerInfo',
-    data () {
-        return {
-            imgurl:[
-                {
-                    imgU:'https://img.shields.io/badge/github-IBepo-bepo?logo=github',
-                    aU:'https://github.com/IamBepo'
-                },
-                {
-                    imgU:'https://img.shields.io/badge/bilibili-IamBepo-bepo?logo=bilibili',
-                    aU:'https://space.bilibili.com/130756553?spm_id_from=333.1007.0.0'
-                },
-                {
-                    imgU:'https://img.shields.io/badge/CSDN-%E5%96%94%E5%9A%AF%E5%9A%AF%E1%BB%9B%20%E2%82%83%E1%BB%9DBepo-bepo?logo=Bitrise',
-                    aU:'https://blog.csdn.net/qq_15029233?type=blog'
-                }
-            ]
-        }
-    }
-}
+<script setup>
+    defineProps({
+        list:Object
+    })
 </script>
 
 <style scoped>

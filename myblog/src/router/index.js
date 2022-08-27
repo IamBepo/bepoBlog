@@ -12,6 +12,7 @@ import ClassManage from '../view/admin/manage/Article/ClassManage.vue'
 import RecommendManage from '../view/admin/manage/Article/RecommendManage.vue'
 import CommentManage from '../view/admin/manage/Article/CommentManage.vue'
 import BasicSetting from '../view/admin/manage/system/BasicSetting.vue'
+import FriendLink from '../view/admin/manage/system/FriendLink.vue'
 import UserList from '../view/admin/manage/user/UserList.vue'
 import VisitHistory from '../view/admin/manage/user/VisitHistory.vue'
 import NotFind from '../view/404/404.vue'
@@ -98,6 +99,11 @@ const router = createRouter({
                     path:'basicSetting',
                     name:'basicSetting',
                     component:BasicSetting
+                },
+                {
+                    path:'friendLink',
+                    name:'friendLink',
+                    component:FriendLink
                 },
                 {
                     path:'userList',

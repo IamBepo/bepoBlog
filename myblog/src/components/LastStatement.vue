@@ -10,20 +10,20 @@
         </div>
     </div>
     <div class="statementBox">
-        {{info.statement}}
+        {{$store.state.systemInfo.underIntroduction}}
     </div>
     <div class="powerBox">
         <div>
-            Powered by <a href="https://github.com/IamBepo" style="color: aliceblue;" target="_blank">{{blogger}}</a>
+            Powered by <a href="https://github.com/IamBepo" style="color: aliceblue;" target="_blank">{{$store.state.systemInfo.underPoweredBy}}</a>
         </div>
         <el-divider direction="vertical" />
         <div>
-            Copyright © {{info.c}}
+            Copyright © {{$store.state.systemInfo.underCopyright}}
         </div>
         <el-divider direction="vertical" />
         <div>
             <a href="https://beian.miit.gov.cn/#/Integrated/index" style="color: aliceblue;"
-                target="_blank">互联网ICP备案：{{info.file}}</a>
+                target="_blank">互联网ICP备案：{{$store.state.systemInfo.underIco}}</a>
         </div>
     </div>
 </template>
@@ -31,7 +31,6 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 
-let blogger = ref('Bepo')
 let friendData = [
     {
         name:'Bepo博客',
@@ -42,11 +41,6 @@ let friendData = [
         url:'https://www.baidu.com'
     },
 ]
-let info = ref({
-    c:'2022-2025',
-    file:'桂ICP备2022005426号',
-    statement:'遇见更好的你'
-})
 </script>
 
 <style scoped>
