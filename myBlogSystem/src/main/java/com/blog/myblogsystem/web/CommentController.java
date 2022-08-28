@@ -4,15 +4,13 @@ import com.blog.myblogsystem.constants.CodeConstants;
 import com.blog.myblogsystem.constants.MsgConstants;
 import com.blog.myblogsystem.pojo.dto.BlogCommentFirstDTO;
 import com.blog.myblogsystem.pojo.dto.BlogCommentSecondDTO;
+import com.blog.myblogsystem.pojo.vo.BlogCommentManageVO;
 import com.blog.myblogsystem.pojo.vo.BlogCommentVO;
 import com.blog.myblogsystem.pojo.vo.BlogNewCommentVO;
 import com.blog.myblogsystem.result.JsonResult;
 import com.blog.myblogsystem.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +41,35 @@ public class CommentController {
     @RequestMapping("/list/new")
     public JsonResult<List<BlogNewCommentVO>> listNewComment(){
         return new JsonResult<>(commentService.listNewComment(),CodeConstants.CODE_200);
+    }
+
+    /**
+     * 删除单个评论
+     * @param blogCommentManageVO
+     * @return
+     */
+    @RequestMapping("/remove/once")
+    public JsonResult removeCommentById(@RequestBody BlogCommentManageVO blogCommentManageVO){
+        commentService.removeCommentById(blogCommentManageVO);
+        return new JsonResult(CodeConstants.CODE_200, MsgConstants.SUCCESS);
+    }
+
+    /**
+     * 删除多个评论
+     * @param arr
+     */
+    @RequestMapping("/remove/arr")
+    public JsonResult removeCommentByArr(@RequestBody List<BlogCommentManageVO> arr){
+        commentService.removeCommentByArr(arr);
+        return new JsonResult(CodeConstants.CODE_200, MsgConstants.SUCCESS);
+    }
+
+    /**
+     * 获取所有评论
+     * @return
+     */
+    @RequestMapping("/list/all")
+    public JsonResult<List<BlogCommentManageVO>> listComment(){
+        return new JsonResult<>(commentService.listComment(),CodeConstants.CODE_200);
     }
 }

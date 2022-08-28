@@ -24,24 +24,16 @@
             </div>
         </div>
         <div style="margin-top: 10px;">
-            <el-table :data="tableData" stripe style="width: 100%" @selection-change="handleSelectionChange" border>
+            <el-table :data="commentList" stripe style="width: 100%" @selection-change="handleSelectionChange" border>
                 <el-table-column type="selection" width="55" />
-                <el-table-column prop="updateTime" label="用户名" width="170" />
-                <el-table-column prop="status" label="文章标题" width="100">
-                    <template #default="{row}">
-                        <el-switch v-model="row.status" class="mt-2" inline-prompt @change="statusChange(row)"
-                            :active-value=1 :inactive-value=0 />
-                    </template>
+                <el-table-column prop="name" label="用户名" width="170" />
+                <el-table-column prop="title" label="文章标题" width="100">
                 </el-table-column>
-                <el-table-column prop="commentStatus" label="评论" width="700">
-                    <template #default="{row}">
-                        <el-switch v-model="row.commentStatus" class="mt-2" inline-prompt @change="commentStatusChange(row)"
-                            :active-value=1 :inactive-value=0 />
-                    </template>
+                <el-table-column prop="content" label="评论" width="800">
                 </el-table-column>
                 <el-table-column prop="id" label="操作">
                     <template #default="{row}">
-                        <el-button type="danger" @click="handleDelete(row.id)">删除
+                        <el-button type="danger" @click="handleDelete(row)">删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -54,4 +46,80 @@
 </template>
 
 <script setup>
+import { inject, onMounted, ref } from "@vue/runtime-core";
+import { ElMessage } from 'element-plus'
+
+    const axios = inject('$axios')
+    let commentList = ref()
+    let searchValue =ref('')
+    let selectedData = ref('')
+
+    function listComment(){
+        axios({
+            url:'comment/list/all',
+            method:'GET'
+        }).then(res => {
+            commentList.value = res.data.data
+        }).catch(error =>{
+            ElMessage({
+                message: '网络似乎出现了问题.',
+                type: 'error',
+            })
+        })
+    }
+
+    function searchFun(){
+
+    }
+
+    function handleSelectionChange(value){
+        selectedData.value = value
+    }
+
+    function mulDelete(){
+        axios({
+            url:'comment/remove/arr',
+            method:'POST',
+            data:selectedData.value
+        }).then(res => {
+            if(res.data.code === '200'){
+                ElMessage({
+                    message: '删除评论成功.',
+                    type: 'success',
+                })
+            }
+        }).catch(error =>{
+            ElMessage({
+                message: '网络似乎出现了问题.',
+                type: 'error',
+            })
+        })
+    }
+
+    function handleDelete(row){
+        axios({
+            url:'comment/remove/once',
+            method:'POST',
+            data:{
+                id:row.id,
+                type:row.type
+            }
+        }).then(res => {
+            if(res.data.code === '200'){
+                ElMessage({
+                    message: '删除评论成功.',
+                    type: 'success',
+                })
+            }
+        }).catch(error =>{
+            ElMessage({
+                message: '网络似乎出现了问题.',
+                type: 'error',
+            })
+        })
+    }
+
+    onMounted:{
+        listComment()
+    }
 </script>

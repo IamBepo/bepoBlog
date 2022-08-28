@@ -2,12 +2,14 @@ package com.blog.myblogsystem.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.blog.myblogsystem.enums.CommentEnum;
 import com.blog.myblogsystem.mapper.BlogCommentFirstMapper;
 import com.blog.myblogsystem.mapper.BlogCommentMapper;
 import com.blog.myblogsystem.mapper.BlogCommentSecondMapper;
 import com.blog.myblogsystem.mapper.UserInfoMapper;
 import com.blog.myblogsystem.pojo.dto.BlogCommentFirstDTO;
 import com.blog.myblogsystem.pojo.dto.BlogCommentSecondDTO;
+import com.blog.myblogsystem.pojo.vo.BlogCommentManageVO;
 import com.blog.myblogsystem.pojo.vo.BlogCommentVO;
 import com.blog.myblogsystem.pojo.vo.BlogNewCommentVO;
 import com.blog.myblogsystem.pojo.vo.BlogSecondCommentVO;
@@ -67,6 +69,45 @@ public class CommentServiceImpl implements CommentService {
         List<BlogNewCommentVO> list = commentMapper.listNewComment();
         list.forEach(item -> {
             item.setUserInfo(userInfoMapper.selectById(item.getUserId()));
+        });
+        return list;
+    }
+
+    @Override
+    public void removeCommentById(BlogCommentManageVO blogCommentManageVO) {
+        if(blogCommentManageVO.getType().equals(CommentEnum.COMMENT_FIRST.name())){
+            commentFirstMapper.deleteById(blogCommentManageVO.getId());
+        }else {
+            commentSecondMapper.deleteById(blogCommentManageVO.getId());
+        }
+    }
+
+    @Override
+    public void removeCommentByArr(List<BlogCommentManageVO> arr) {
+        arr.forEach(item -> {
+            if(item.getType().equals(CommentEnum.COMMENT_FIRST.name())){
+                commentFirstMapper.deleteById(item.getId());
+            }else {
+                commentSecondMapper.deleteById(item.getId());
+            }
+        });
+    }
+
+    @Override
+    public List<BlogCommentManageVO> listComment() {
+        List<BlogCommentManageVO> list = new ArrayList<>();
+        List<BlogCommentManageVO> firstList = commentMapper.listFirstComent();
+        firstList.forEach(item -> {
+            item.setType(CommentEnum.COMMENT_FIRST.name());
+            list.add(item);
+            List<BlogCommentManageVO> secondList = commentMapper.listSecondCommentByFirstId(item.getId());
+            secondList.forEach(sItem -> {
+                sItem.setType(CommentEnum.COMMENT_SECOND.name());
+                sItem.setBodyId(item.getBodyId());
+                sItem.setArticleId(item.getArticleId());
+                sItem.setTitle(item.getTitle());
+                list.add(sItem);
+            });
         });
         return list;
     }

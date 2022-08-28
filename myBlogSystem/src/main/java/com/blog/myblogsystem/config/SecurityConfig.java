@@ -41,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/recommend/*/*",
                         "/recommend/*/*/*",
                         "/system/*",
-                        "/system/*/*"
+                        "/system/*/*",
+                        "/system/*/*/*"
                 )
                 .anonymous()
                 // 除上面外的所有请求全部需要鉴权认证

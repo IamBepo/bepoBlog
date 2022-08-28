@@ -23,7 +23,7 @@
         <el-divider direction="vertical" />
         <div>
             <a href="https://beian.miit.gov.cn/#/Integrated/index" style="color: aliceblue;"
-                target="_blank">互联网ICP备案：{{$store.state.systemInfo.underIco}}</a>
+                target="_blank">互联网ICP备案：{{$store.state.systemInfo.underIcp}}</a>
         </div>
     </div>
 </template>

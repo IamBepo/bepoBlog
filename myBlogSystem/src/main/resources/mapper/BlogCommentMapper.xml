@@ -27,4 +27,18 @@
         where A.deleted = 0 and A.article_id = B.id
         limit 5
     </select>
+
+    <select id="listFirstComent" resultType="blogCommentManageVO">
+        SELECT A.id,A.user_id,B.`name`,A.content,C.id as body_id,C.content_id as article_id ,C.title
+        FROM `blog_comment_first` as A,`user_info` as B,`blog_body` as C
+        where A.user_id = B.id and A.article_id = C.id and A.deleted = 0
+        ORDER BY id DESC
+    </select>
+
+    <select id="listSecondCommentByFirstId" resultType="blogCommentManageVO" parameterType="integer">
+        SELECT A.id,A.user_id,B.`name`,A.content
+        FROM `blog_comment_second` as A,`user_info` as B
+        where A.user_id = B.id and A.first_id = #{id} and A.deleted = 0
+        ORDER BY id DESC
+    </select>
 </mapper>
