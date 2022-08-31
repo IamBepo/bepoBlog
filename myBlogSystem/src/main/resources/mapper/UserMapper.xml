@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.myblogsystem.mapper.UserMapper">
+    <sql id="Router_Base_Column_List">
+        id,path,name,
+        component,rank,father_id
+    </sql>
+
+
+    <select id="getUserInfoAndRank" parameterType="integer" resultType="userVO">
+        SELECT A.id,A.userid,A.name as user_name, A.email,A.avatar,C.`name` as role_name,C.role_key as role_key,C.rank as role_rank
+        FROM `user_info` as A,`user_role` as B,`power_role` as C
+        where A.id = B.user_id and B.role_id = C.id
+    </select>
+
+    <select id="listLessThanRankRouter" parameterType="integer" resultType="blogRouterVO">
+        select <include refid="Router_Base_Column_List"></include>
+        from power_router
+        where rank <![CDATA[ <= ]]> #{rank} and father_id = #{fatherId}
+    </select>
+</mapper>

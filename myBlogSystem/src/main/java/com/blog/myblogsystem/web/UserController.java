@@ -9,6 +9,7 @@ import com.blog.myblogsystem.result.JsonResult;
 import com.blog.myblogsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +31,7 @@ public class UserController {
 
     @RequestMapping("/signIn")
     public JsonResult signIn(UserLoginDTO userLoginDTO){
-        return userService.logOn(userLoginDTO);
+        return new JsonResult(userService.logOn(userLoginDTO),CodeConstants.CODE_200);
     }
 
 }

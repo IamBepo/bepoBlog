@@ -2,11 +2,14 @@ package com.blog.myblogsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.myblogsystem.constants.CodeConstants;
+import com.blog.myblogsystem.mapper.UserMapper;
 import com.blog.myblogsystem.pojo.dto.UserInfoDTO;
 import com.blog.myblogsystem.pojo.dto.UserLoginDTO;
 import com.blog.myblogsystem.exception.LoginException;
 import com.blog.myblogsystem.mapper.UserInfoMapper;
 import com.blog.myblogsystem.mapper.UserLoginMapper;
+import com.blog.myblogsystem.pojo.vo.BlogRouterVO;
+import com.blog.myblogsystem.pojo.vo.UserVO;
 import com.blog.myblogsystem.result.JsonResult;
 import com.blog.myblogsystem.service.UserService;
 import com.blog.myblogsystem.utils.JwtUtil;
@@ -15,19 +18,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired(required = false)
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired(required = false)
-    UserInfoMapper userInfoMapper;
+    private UserInfoMapper userInfoMapper;
     @Autowired(required = false)
-    UserLoginMapper userLoginMapper;
+    private UserLoginMapper userLoginMapper;
+    @Autowired(required = false)
+    private UserMapper userMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JsonResult logOn(UserLoginDTO userLoginDTO) {
+    public UserVO logOn(UserLoginDTO userLoginDTO) {
         if(Objects.isNull(userLoginDTO.getUserid())||Objects.isNull(userLoginDTO.getPassword())){
             throw new LoginException("空参数",CodeConstants.CODE_500);
         }
@@ -59,9 +62,24 @@ public class UserServiceImpl implements UserService {
         if(!passwordEncoder.matches(userLoginDTO.getPassword(),user.getPassword())){
             throw new LoginException("用户名或密码错误",CodeConstants.CODE_500);
         }
+
+        /**
+         * 授权查询
+         */
+        UserVO userInfoAndRank = userMapper.getUserInfoAndRank(user.getId());
+        List<BlogRouterVO> fatherRouterList = userMapper.listLessThanRankRouter(userInfoAndRank.getRoleRank(),0);
+        fatherRouterList.forEach(aItem -> {
+            List<BlogRouterVO> childRouter = userMapper.listLessThanRankRouter(aItem.getRank(), aItem.getId());
+            aItem.setNextRouter(childRouter);
+            childRouter.forEach(bItem -> {
+                List<BlogRouterVO> bChildRouter = userMapper.listLessThanRankRouter(bItem.getRank(), bItem.getId());
+                bItem.setNextRouter(bChildRouter);
+            });
+        });
+        userInfoAndRank.setRouterList(fatherRouterList);
+
         String jwt = JwtUtil.createJWT(userLoginDTO.getUserid());
-        Map<String,String> map = new HashMap<>();
-        map.put("token",jwt);
-        return new JsonResult(map,CodeConstants.CODE_200);
+        userInfoAndRank.setToken(jwt);
+        return userInfoAndRank;
     }
 }

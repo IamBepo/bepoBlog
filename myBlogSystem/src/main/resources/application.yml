@@ -10,10 +10,10 @@ spring:
       url: jdbc:mysql://sh-cynosdbmysql-grp-j2y4yak0.sql.tencentcdb.com:24444/blog?useSSL=true&characterEncoding=UTF-8&useUnicode=true&serverTimezone=GMT%2B8
       username: root
       password: 11321312aA
-      initial-size: 10 #初始化连接数
-      min-idle: 10 #最小
+      initial-size: 50 #初始化连接数
+      min-idle: 50 #最小
       max-wait: 2500
-      max-active: 20 #最大
+      max-active: 200 #最大
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
