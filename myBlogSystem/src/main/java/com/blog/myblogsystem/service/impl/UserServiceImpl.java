@@ -13,6 +13,8 @@ import com.blog.myblogsystem.pojo.vo.UserVO;
 import com.blog.myblogsystem.result.JsonResult;
 import com.blog.myblogsystem.service.UserService;
 import com.blog.myblogsystem.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired(required = false)
     private PasswordEncoder passwordEncoder;
@@ -78,8 +81,37 @@ public class UserServiceImpl implements UserService {
         });
         userInfoAndRank.setRouterList(fatherRouterList);
 
-        String jwt = JwtUtil.createJWT(userLoginDTO.getUserid());
+        String jwt = JwtUtil.createJWT(user.getId().toString());
         userInfoAndRank.setToken(jwt);
         return userInfoAndRank;
+    }
+
+    @Override
+    public BlogRouterVO listAuthorizationRouter(String token) {
+        return null;
+    }
+
+    @Override
+    public UserVO logOnAuthorization(String token) {
+        try{
+            Claims claims = JwtUtil.parseJWT(token);
+            String id = claims.getSubject();
+
+            UserVO userInfoAndRank = userMapper.getUserInfoAndRank(Integer.parseInt(id));
+            List<BlogRouterVO> fatherRouterList = userMapper.listLessThanRankRouter(userInfoAndRank.getRoleRank(),0);
+            fatherRouterList.forEach(aItem -> {
+                List<BlogRouterVO> childRouter = userMapper.listLessThanRankRouter(aItem.getRank(), aItem.getId());
+                aItem.setNextRouter(childRouter);
+                childRouter.forEach(bItem -> {
+                    List<BlogRouterVO> bChildRouter = userMapper.listLessThanRankRouter(bItem.getRank(), bItem.getId());
+                    bItem.setNextRouter(bChildRouter);
+                });
+            });
+            userInfoAndRank.setRouterList(fatherRouterList);
+            return userInfoAndRank;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

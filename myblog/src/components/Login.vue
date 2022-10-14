@@ -80,10 +80,12 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 import { useStore } from "vuex";
+import {useRoute,useRouter} from 'vue-router'
 import axois from '../plugins/axios'
 import qs from 'qs'
 
     const store = useStore()
+    const router = useRouter()
 
     let showIn = ref(true)
     let username = ref('')
@@ -111,7 +113,6 @@ import qs from 'qs'
             data:qs.stringify(data),
         }).then((res)=>{
             console.log(res.data)
-            console.log(localStorage.getItem('token'))
             if(res.data.code === "200"){
                 localStorage.setItem('token',res.data.data.token)
                 store.commit('loginJudge',true)

@@ -1,5 +1,6 @@
 package com.blog.myblogsystem.config;
 
+import com.blog.myblogsystem.filter.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private TokenAuthenticationFilter tokenAuthenticationFilter;
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -30,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/user/signUp",
                         "/user/signIn",
+                        "/user/*",
                         "/blog/*/*",
                         "/blog/*/*/*",
                         "/blog/*",
@@ -49,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         //把token校验过滤器添加到过滤器链中
-//        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

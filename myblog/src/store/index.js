@@ -19,6 +19,15 @@ export default createStore({
       underCopyright:'',
       underIcp:''
     },
+    adminRouter:[{
+      path:'/admin',
+      name:'Admin',
+      compoent:'',
+      mate:{
+        title:'后台管理 - 首页'
+      },
+      children:[{}]
+    }]
   },
   mutations: {
     loginVisbleJudge(state,value){
@@ -51,6 +60,9 @@ export default createStore({
     },
     getSystemInfo(state,value){
       state.systemInfo = value
+    },
+    setAdminRouter(state,value){
+      state.adminRouter = value
     },
   },
   actions: {

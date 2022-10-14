@@ -34,4 +34,9 @@ public class UserController {
         return new JsonResult(userService.logOn(userLoginDTO),CodeConstants.CODE_200);
     }
 
+    @RequestMapping("/authorization")
+    public JsonResult logOnAuthorization(String token){
+        return new JsonResult(userService.logOnAuthorization(token),CodeConstants.CODE_200);
+    }
+
 }
