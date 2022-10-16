@@ -53,4 +53,8 @@ public class UserLoginDTO implements Serializable {
         this.userid = userid;
         this.password = password;
     }
+
+    public UserLoginDTO(Integer id) {
+        this.id = id;
+    }
 }

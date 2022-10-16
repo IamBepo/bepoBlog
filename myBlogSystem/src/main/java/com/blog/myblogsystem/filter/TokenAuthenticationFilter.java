@@ -1,7 +1,13 @@
 package com.blog.myblogsystem.filter;
 
+import com.blog.myblogsystem.pojo.dto.UserCustomDetail;
+import com.blog.myblogsystem.pojo.dto.UserLoginDTO;
+import com.blog.myblogsystem.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,6 +28,17 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
-        log.debug(token);
+        Claims claims = null;
+        try {
+            claims = JwtUtil.parseJWT(token);
+        } catch (Exception e) {
+            throw new RuntimeException("token错误");
+        }
+        String id = claims.getSubject();
+        UserCustomDetail userCustomDetail = new UserCustomDetail(new UserLoginDTO(Integer.parseInt(id)), null);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userCustomDetail, null, userCustomDetail.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        filterChain.doFilter(request,response);
     }
 }

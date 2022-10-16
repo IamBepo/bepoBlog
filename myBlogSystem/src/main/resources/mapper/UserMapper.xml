@@ -6,7 +6,7 @@
 <mapper namespace="com.blog.myblogsystem.mapper.UserMapper">
     <sql id="Router_Base_Column_List">
         id,path,name,
-        component,rank,father_id
+        component,title,redirect,rank,father_id
     </sql>
 
 
@@ -16,9 +16,15 @@
         where A.id = B.user_id and B.role_id = C.id
     </select>
 
-    <select id="listLessThanRankRouter" parameterType="integer" resultType="blogRouterVO">
+    <select id="listLessThanRankFatherRouter" parameterType="integer" resultType="blogRouterVO">
         select <include refid="Router_Base_Column_List"></include>
         from power_router
         where rank <![CDATA[ <= ]]> #{rank} and father_id = #{fatherId}
+    </select>
+
+    <select id="listLessThanRankRouter" parameterType="integer" resultType="blogRouterVO">
+        select <include refid="Router_Base_Column_List"></include>
+        from power_router
+        where rank <![CDATA[ <= ]]> #{rank}
     </select>
 </mapper>

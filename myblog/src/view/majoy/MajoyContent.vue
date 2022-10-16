@@ -43,9 +43,8 @@ import TopSwiper from '../../components/TopSwiper.vue';
 import RightNewComment from '../../components/RightNewComment.vue';
 import { inject, onMounted, ref } from '@vue/runtime-core';
 import { ElMessage } from 'element-plus'
-import store from '../../store'
+import articleApi from '../../api/ArticleApi'
 
-    const axios = inject('$axios')
     let articleList = ref()
     let tabList = ref()
     let newCommentList = ref()
@@ -54,118 +53,38 @@ import store from '../../store'
     let shieldsList = ref()
 
     function listArticle(){
-        axios({
-            url:'/blog/list/home',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                articleList.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getArticleList().then(res => {
+            articleList.value = res.data.data
         })
     }
 
     function listTab(){
-        axios({
-            url:'/blog/tab/list',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                tabList.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getTabList().then(res => {
+            tabList.value = res.data.data
         })
     }
 
     function listNewComment(){
-        axios({
-            url:'/comment/list/new',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                newCommentList.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getNewCommentList().then(res => {
+            newCommentList.value = res.data.data
         })
     }
 
     function listListRecommend(){
-        axios({
-            url:'/recommend/list/all/list',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                listRecommendList.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getRecommendList().then(res => {
+            listRecommendList.value = res.data.data
         })
     }
 
     function listWalkRecommend(){
-        axios({
-            url:'/recommend/list/all/walk',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                walkRecommendList.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getWalkRecommendList().then(res => {
+            walkRecommendList.value = res.data.data
         })
     }
 
     function listShields(){
-        axios({
-            url: '/system/list/shields',
-            method: 'GET'
-        }).then(res => {
-            if (res.data.code === '200') {
-                shieldsList.value = res.data.data
-            }
+        articleApi.getShieldsList().then(res => {
+            shieldsList.value = res.data.data
         })
     }
 

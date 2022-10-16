@@ -43,9 +43,9 @@ import {useRoute} from 'vue-router'
 import { getCurrentInstance, inject, onMounted } from "@vue/runtime-core";
 import { ElMessage } from 'element-plus'
 import PostComment from '../../components/PostComment.vue'
+import articleApi from '../../api/ArticleApi'
 
     const { proxy } = getCurrentInstance()
-    const axios = inject('$axios')
     const preview = ref()
     const route = useRoute()
     let articleList = ref({
@@ -59,81 +59,18 @@ import PostComment from '../../components/PostComment.vue'
     })
     let commentList = ref()
 
-    // let titles = ref([
-    //     {
-    //         indent: 0,
-    //         lineIndex: null,
-    //         title: "Markdown Editor built on Vue"
-    //     }
-    // ])
-
     function listArticle(id){
-        axios({
-            url: '/blog/read/' + id,
-            method: 'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                articleList.value = res.data.data
-                console.log(articleList.value)
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getArticleContent(id).then(res => {
+            articleList.value = res.data.data
         })
     }
 
-    // function test(){
-    //     const anchors = proxy.$refs.preview.$el.querySelectorAll('h1,h2,h3,h4,h5,h6')
-    //     const titles = Array.from(anchors).filter((title) => !!title.innerText.trim());
-
-    //     if (!titles.length) {
-    //         titles.value = [];
-    //         return;
-    //     }
-
-    //     const hTags = Array.from(new Set(titles.map((title) => title.tagName))).sort();
-
-    //     titles.value = titles.map((el) => ({
-    //         title: el.innerText,
-    //         lineIndex: el.getAttribute('data-v-md-line'),
-    //         indent: hTags.indexOf(el.tagName),
-    //     }));
-    //     console.log(titles.value)
-    // }
-
-    // function handleAnchorClick(){
-    //     console.log(titles.value)
-    // }
-
     function listComment(id){
-        axios({
-            url: '/comment/list/' + id,
-            method: 'GET',
-        }).then(res => {
-            if(res.data.code === '200'){
-                commentList.value = res.data.data
-                for(let i = 0;i<commentList.value.length;i++){
-                    commentList.value[i].replyInputVisble = false
-                }
-                console.log(commentList.value)
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
+        articleApi.getArticleComment(id).then(res => {
+            commentList.value = res.data.data
+            for(let i = 0;i<commentList.value.length;i++){
+                commentList.value[i].replyInputVisble = false
             }
-        }).catch(error => {
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
         })
     }
 

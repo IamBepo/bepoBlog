@@ -78,10 +78,9 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import axois from '../../../../plugins/axios'
-import qs from 'qs'
 import { ElMessage } from 'element-plus'
 import { onMounted } from "@vue/runtime-core";
+import articleApi from '../../../../api/ArticleApi'
 
     let searchValue = ref('')
     let addSortVisible = ref(false)
@@ -97,25 +96,8 @@ import { onMounted } from "@vue/runtime-core";
         let data = {
             content:searchValue.value
         }
-        axois({
-            url:'/blog/sort/search',
-            method:'POST',
-            data:qs.stringify(data)
-        }).then(res=>{
-            if(res.data.code === '200'){
-                tableData.value = res.data.data
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error'
-            })
+        articleApi.getSearchSort(data).then(res => {
+            tableData.value = res.data.data
         })
     }
 
@@ -124,27 +106,10 @@ import { onMounted } from "@vue/runtime-core";
             id:value.id,
             status:value.status
         }
-        axois({
-            url:'/blog/sort/update/status',
-            method:'POST',
-            data:qs.stringify(data)
-        }).then(res => {
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '修改分类状态成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        articleApi.updateSortStatus(data).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '修改分类状态成功.',
+                type: 'success',
             })
         })
     }
@@ -153,30 +118,13 @@ import { onMounted } from "@vue/runtime-core";
         let data = {
             name:addSortInput.value
         }
-        axois({
-            url:'/blog/sort/save',
-            method:'POST',
-            data:qs.stringify(data)
-        }).then(res => {
-            if(res.data.code === '200'){
-                addSortVisible.value = false
-                addSortInput.value = ''
-                listSort()
-                ElMessage({
-                    message: '新增分类成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        articleApi.addSort(data).then(res => {
+            addSortVisible.value = false
+            addSortInput.value = ''
+            listSort()
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '新增分类成功.',
+                type: 'success',
             })
         })
     }
@@ -186,31 +134,13 @@ import { onMounted } from "@vue/runtime-core";
             id:exitObject.value.id,
             newName:ExitInput.value
         }
-        axois({
-            url:'/blog/sort/update/name',
-            method:'post',
-            data:qs.stringify(data)
-        }).then(res => {
-            if(res.data.code === '200'){
-                ExitSortVisible.value = false
-                ExitInput.value = ''
-                listSort()
-                ElMessage({
-                    message: '修改分类成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '修改分类失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            console.log(error)
+        articleApi.updateSortContent(data).then(res => {
+            ExitSortVisible.value = false
+            ExitInput.value = ''
+            listSort()
             ElMessage({
-                message: '修改分类失败.',
-                type: 'error',
+                message: '修改分类成功.',
+                type: 'success',
             })
         })
     }
@@ -226,51 +156,18 @@ import { onMounted } from "@vue/runtime-core";
     }
 
     function handleDelete(row){
-        axois({
-            url:'blog/sort/remove/' + row.id,
-            method:'POST',
-        }).then(res => {
-            if(res.data.code === '200'){
-                listSort()
-                ElMessage({
-                    message: '删除分类成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '删除分类失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            console.log(error)
+        articleApi.removeOnceSort(row.id).then(res => {
+            listSort()
             ElMessage({
-                message: '删除分类失败.',
-                type: 'error',
+                message: '删除分类成功.',
+                type: 'success',
             })
         })
     }
 
     function listSort(){
-        axois({
-            url:'/blog/sort/list',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                tableData.value = res.data.data
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getSortList().then(res => {
+            tableData.value = res.data.data
         })
     }
 

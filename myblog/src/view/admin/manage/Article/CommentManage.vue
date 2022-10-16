@@ -46,25 +46,17 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from "@vue/runtime-core";
+import { onMounted, ref } from "@vue/runtime-core";
 import { ElMessage } from 'element-plus'
+import articleApi from '../../../../api/ArticleApi'
 
-    const axios = inject('$axios')
     let commentList = ref()
     let searchValue =ref('')
     let selectedData = ref('')
 
     function listComment(){
-        axios({
-            url:'comment/list/all',
-            method:'GET'
-        }).then(res => {
+        articleApi.getAllArticleCommentList().then(res => {
             commentList.value = res.data.data
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
         })
     }
 
@@ -77,44 +69,23 @@ import { ElMessage } from 'element-plus'
     }
 
     function mulDelete(){
-        axios({
-            url:'comment/remove/arr',
-            method:'POST',
-            data:selectedData.value
-        }).then(res => {
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '删除评论成功.',
-                    type: 'success',
-                })
-            }
-        }).catch(error =>{
+        articleApi.removeMulComment(selectedData.value).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '删除评论成功.',
+                type: 'success',
             })
         })
     }
 
     function handleDelete(row){
-        axios({
-            url:'comment/remove/once',
-            method:'POST',
-            data:{
-                id:row.id,
-                type:row.type
-            }
-        }).then(res => {
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '删除评论成功.',
-                    type: 'success',
-                })
-            }
-        }).catch(error =>{
+        let data = {
+            id:row.id,
+            type:row.type
+        }
+        articleApi.removeOnceComment(data).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '删除评论成功.',
+                type: 'success',
             })
         })
     }

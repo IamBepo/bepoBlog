@@ -65,8 +65,7 @@ import { ElMessage ,ElMessageBox } from 'element-plus'
 import CoverSelect from '../../../../../components/CoverSelect.vue'
 import TabSelect from '../../../../../components/TabSelect.vue'
 import store from "../../../../../store"
-import axois from '../../../../../plugins/axios'
-import qs from 'qs'
+import articleApi from '../../../../../api/ArticleApi'
 
     let content = ref('')
     let titleInput = ref('')
@@ -101,24 +100,8 @@ import qs from 'qs'
     let sortList = ref('')
 
     function listSort(){
-        axois({
-            url:'/blog/sort/list',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                sortList.value = res.data.data
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getSortList().then(res => {
+            sortList.value = res.data.data
         })
     }
 
@@ -157,6 +140,16 @@ import qs from 'qs'
                 sortId:sortValue.value,
                 tabId: tags,
             }
+            articleApi.addArticle(data).then(res => {
+                titleInput.value = '',
+                store.commit('coverSelect','')
+                content.value = ''
+                ElMessage({
+                    message: '发表成功.',
+                    type: 'success',
+                })
+            })
+            /*
             axois({
                 url:'/blog/save',
                 method:'POST',
@@ -181,7 +174,7 @@ import qs from 'qs'
                     message: '网络似乎出现了问题.',
                     type: 'error',
                 })
-            })
+            })*/
         }
 
     }

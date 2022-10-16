@@ -1,5 +1,4 @@
 import { createRouter,createWebHistory } from "vue-router";
-import {dycRouter} from './dyc.js'
 import View from '../view/View.vue'
 import MajorContent from '../view/majoy/MajoyContent.vue'
 import AboutBlogger from '../view/about/AboutBlogger.vue'
@@ -52,11 +51,6 @@ const router = createRouter({
                 }
             ]
         },
-        // {
-        //     path:'/:pathMatch(.*)',
-        //     name:'404',
-        //     component:NotFind
-        // }
     ]
 })
 
@@ -90,28 +84,37 @@ router.beforeEach((to, from, next) => {
               token:localStorage.getItem('token')
             })
         }).then(res => {
-            let dataRouter = res.data.data.routerList
-            console.log(res.data.data.routerList)
-            let headAdminRouter = [
-              {
-                path: dataRouter[0].path,
-                name: dataRouter[0].name,
-                component: routerComponents[dataRouter[0].component],
-                mate: {
-                  title: '后台管理 - 首页'
-                },
-                children: dataRouter[0].nextRouter
-              }
-            ]
-            headAdminRouter[0].children.forEach(item => {
-                item.component = routerComponents[item.component]
+            if(res.data.code === '200'){
+                let dataRouter = res.data.data.routerList
+                console.log(res.data)
+                let headAdminRouter = [
+                  {
+                    path: dataRouter[0].path,
+                    name: dataRouter[0].name,
+                    component: routerComponents[dataRouter[0].component],
+                    mate: {
+                      title: dataRouter[0].title
+                    },
+                    children: dataRouter[0].nextRouter
+                  }
+                ]
+                headAdminRouter[0].children.forEach(item => {
+                    item.component = routerComponents[item.component]
+                    item.children = item.nextRouter
+                    item.children.forEach(childItem => {
+                        childItem.component = routerComponents[childItem.component]
+                    })
+                })
+                // store.commit('setAdminRouter',headAdminRouter)
+                headAdminRouter.forEach(item => {
+                    router.addRoute(item)
+                })
+            }
+            router.addRoute({
+                path: '/:pathMatch(.*)',
+                name:'404',
+                component: routerComponents['NotFind']
             })
-            // store.commit('setAdminRouter',headAdminRouter)
-            headAdminRouter.forEach(item => {
-                console.log(item)
-                router.addRoute(item)
-            })
-            console.log(headAdminRouter)
             next({ ...to, replace: true })
         })
     }else{

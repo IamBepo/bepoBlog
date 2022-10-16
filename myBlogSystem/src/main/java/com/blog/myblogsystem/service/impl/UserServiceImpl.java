@@ -12,6 +12,7 @@ import com.blog.myblogsystem.pojo.vo.BlogRouterVO;
 import com.blog.myblogsystem.pojo.vo.UserVO;
 import com.blog.myblogsystem.result.JsonResult;
 import com.blog.myblogsystem.service.UserService;
+import com.blog.myblogsystem.utils.CommonUtils;
 import com.blog.myblogsystem.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -67,19 +68,12 @@ public class UserServiceImpl implements UserService {
         }
 
         /**
-         * 授权查询
+         * 授权路由查询
          */
         UserVO userInfoAndRank = userMapper.getUserInfoAndRank(user.getId());
-        List<BlogRouterVO> fatherRouterList = userMapper.listLessThanRankRouter(userInfoAndRank.getRoleRank(),0);
-        fatherRouterList.forEach(aItem -> {
-            List<BlogRouterVO> childRouter = userMapper.listLessThanRankRouter(aItem.getRank(), aItem.getId());
-            aItem.setNextRouter(childRouter);
-            childRouter.forEach(bItem -> {
-                List<BlogRouterVO> bChildRouter = userMapper.listLessThanRankRouter(bItem.getRank(), bItem.getId());
-                bItem.setNextRouter(bChildRouter);
-            });
-        });
-        userInfoAndRank.setRouterList(fatherRouterList);
+        List<BlogRouterVO> fatherRouterList = userMapper.listLessThanRankRouter(userInfoAndRank.getRoleRank());
+        List<BlogRouterVO> blogRouterList = CommonUtils.makeRouter(fatherRouterList);
+        userInfoAndRank.setRouterList(blogRouterList);
 
         String jwt = JwtUtil.createJWT(user.getId().toString());
         userInfoAndRank.setToken(jwt);
@@ -98,16 +92,9 @@ public class UserServiceImpl implements UserService {
             String id = claims.getSubject();
 
             UserVO userInfoAndRank = userMapper.getUserInfoAndRank(Integer.parseInt(id));
-            List<BlogRouterVO> fatherRouterList = userMapper.listLessThanRankRouter(userInfoAndRank.getRoleRank(),0);
-            fatherRouterList.forEach(aItem -> {
-                List<BlogRouterVO> childRouter = userMapper.listLessThanRankRouter(aItem.getRank(), aItem.getId());
-                aItem.setNextRouter(childRouter);
-                childRouter.forEach(bItem -> {
-                    List<BlogRouterVO> bChildRouter = userMapper.listLessThanRankRouter(bItem.getRank(), bItem.getId());
-                    bItem.setNextRouter(bChildRouter);
-                });
-            });
-            userInfoAndRank.setRouterList(fatherRouterList);
+            List<BlogRouterVO> fatherRouterList = userMapper.listLessThanRankRouter(userInfoAndRank.getRoleRank());
+            List<BlogRouterVO> blogRouterList = CommonUtils.makeRouter(fatherRouterList);
+            userInfoAndRank.setRouterList(blogRouterList);
             return userInfoAndRank;
         }catch (Exception e){
             e.printStackTrace();

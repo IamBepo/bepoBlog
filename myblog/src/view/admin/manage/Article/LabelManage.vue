@@ -77,10 +77,9 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import axois from '../../../../plugins/axios'
 import { ElMessage } from 'element-plus'
-import qs from 'qs'
 import { onMounted } from "@vue/runtime-core";
+import articleApi from '../../../../api/ArticleApi'
 
     let searchValue = ref('')
     let LabelVisible = ref(false)
@@ -96,25 +95,8 @@ import { onMounted } from "@vue/runtime-core";
         let data = {
             content:searchValue.value
         }
-        axois({
-            url:'/blog/tab/search',
-            method:'POST',
-            data:qs.stringify(data)
-        }).then(res=>{
-            if(res.data.code === '200'){
-                tableData.value = res.data.data
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getSearchTab(data).then(res => {
+            tableData.value = res.data.data
         })
     }
 
@@ -123,28 +105,10 @@ import { onMounted } from "@vue/runtime-core";
             id:value.id,
             status:value.status
         }
-        axois({
-            url:'/blog/tab/update/status',
-            method:'POST',
-            data:qs.stringify(data)
-        }).then(res => { 
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '修改标签状态成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '修改标签状态失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            console.log(error)
+        articleApi.updateTabStatus(data).then(res => {
             ElMessage({
-                message: '修改标签状态失败.',
-                type: 'error',
+                message: '修改标签状态成功.',
+                type: 'success',
             })
         })
     }
@@ -153,54 +117,20 @@ import { onMounted } from "@vue/runtime-core";
         let data = {
             name : labelInput.value
         }
-        axois({
-            url:'/blog/tab/save',
-            method:'post',
-            data:qs.stringify(data)
-        }).then(res => {
-            if(res.data.code === '200'){
-                LabelVisible.value = false
-                labelInput.value = ''
-                listTab()
-                ElMessage({
-                    message: '添加标签成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '添加标签失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            console.log(error)
+        articleApi.addLabel(data).then(res => {
+            LabelVisible.value = false
+            labelInput.value = ''
+            listTab()
             ElMessage({
-                message: '添加标签失败.',
-                type: 'error',
+                message: '添加标签成功.',
+                type: 'success',
             })
         })
     }
 
     function listTab(){
-        axois({
-            url:'/blog/tab/list',
-            method:'GET'
-        }).then(res=>{
-            if(res.data.code === '200'){
-                tableData.value = res.data.data
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getTabList().then(res => {
+            tableData.value = res.data.data
         })
     }
 
@@ -214,58 +144,23 @@ import { onMounted } from "@vue/runtime-core";
             id:exitObject.value.id,
             newName:ExitInput.value
         }
-        axois({
-            url:'/blog/tab/update/exit',
-            method:'post',
-            data:qs.stringify(data)
-        }).then(res => {
-            if(res.data.code === '200'){
-                ExitLabelVisible.value = false
-                ExitInput.value = ''
-                listTab()
-                ElMessage({
-                    message: '修改标签成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '修改标签失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            console.log(error)
+        articleApi.updateTabContent(data).then(res => {
+            ExitLabelVisible.value = false
+            ExitInput.value = ''
+            listTab()
             ElMessage({
-                message: '修改标签失败.',
-                type: 'error',
+                message: '修改标签成功.',
+                type: 'success',
             })
         })
     }
 
     function handleDelete(row){
-        axois({
-            url:'/blog/tab/delete/' + row.id,
-            method:'POST',
-        }).then(res => {
-            if(res.data.code === '200'){
-                listTab()
-                ElMessage({
-                    message: '删除标签成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '删除标签失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
-            console.log(error)
+        articleApi.removeOnceTab(row.id).then(res => {
+            listTab()
             ElMessage({
-                message: '删除标签失败.',
-                type: 'error',
+                message: '删除标签成功.',
+                type: 'success',
             })
         })
     }

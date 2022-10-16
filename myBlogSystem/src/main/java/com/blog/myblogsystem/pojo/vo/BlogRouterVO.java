@@ -14,6 +14,8 @@ public class BlogRouterVO {
     private String path;
     private String name;
     private String component;
+    private String title;
+    private String redirect;
     private Integer rank;
     private Integer fatherId;
     private List<BlogRouterVO> nextRouter;

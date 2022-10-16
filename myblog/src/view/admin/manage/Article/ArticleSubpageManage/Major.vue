@@ -81,11 +81,11 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import { inject, onMounted } from "@vue/runtime-core";
+import { onMounted } from "@vue/runtime-core";
 import { ElMessage } from 'element-plus'
+import articleApi from '../../../../../api/ArticleApi'
+import recommendApi from '../../../../../api/RecommendApi'
 
-    const axios = inject('$axios')
-    const qs = inject('$qs')
     let searchValue = ref('')
 
     let checkedData = ref([''])
@@ -95,86 +95,43 @@ import { ElMessage } from 'element-plus'
         let data = {
             content:searchValue.value
         }
-        axios({
-            url:'/blog/search',
-            method:'POST',
-            data:qs.stringify(data)
-        }).then(res => {
+        articleApi.getSearchArticleList(data).then(res => {
             tableData.value = res.data.data
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
         })
     }
 
     function statusChange(row){
-        axios({
-            url:'blog/update/status/vs',
-            method:'POST',
-            data:qs.stringify({
-                id:row.id,
-                status:row.status
-            })
-        }).then(res => {
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        let data = {
+            id:row.id,
+            status:row.status
+        }
+        articleApi.updateArticleStatus(data).then(res => {
         })
     }
 
     function recommendStatusChange(row){
-        axios({
-            url:'blog/update/status/recommend',
-            method:'POST',
-            data:qs.stringify({
-                id:row.id,
-                status:row.recommendStatus
-            })
-        }).then(res => {
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        let data = {
+            id:row.id,
+            status:row.recommendStatus
+        }
+        recommendApi.updateArticleRecommendStatus(data).then(res => {
         })
     }
 
     function commentStatusChange(row){
-        axios({
-            url:'blog/update/status/comment',
-            method:'POST',
-            data:qs.stringify({
-                id:row.id,
-                status:row.commentStatus
-            })
-        }).then(res => {
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
-        })
+        let data = {
+            id:row.id,
+            status:row.commentStatus
+        }
+        articleApi.updateArticleCommentStatus(data).then(res => {})
     }
 
     function topStatusChange(row){
-        axios({
-            url:'blog/update/status/top',
-            method:'POST',
-            data:qs.stringify({
-                id:row.id,
-                status:row.topStatus
-            })
-        }).then(res => {
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
-        })
+        let data = {
+            id:row.id,
+            status:row.topStatus
+        }
+        recommendApi.updateArticleTopStatus(data).then(res => {})
     }
 
     function handleSelectionChange(value){
@@ -186,66 +143,27 @@ import { ElMessage } from 'element-plus'
         for(let i = 0;i<checkedData.value.length;i++){
             arrId.push(checkedData.value[i].id)
         }
-        axios({
-            url:'/blog/remove/arr',
-            method:'POST',
-            data:arrId
-        }).then(res => {
-            if(res.data.code === '200'){
-                listArticle()
-                ElMessage({
-                    message: '删除成功.',
-                    type: 'success',
-                })
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        articleApi.removeMulArticle(arrId).then(res => {
+            listArticle()
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '删除成功.',
+                type: 'success',
             })
         })
     }
 
     function listArticle(){
-        axios({
-            url:'/blog/list',
-            method:'GET'
-        }).then(res => {
+        articleApi.getAdminArticleList().then(res => {
             tableData.value = res.data.data
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
         })
     }
 
     function handleDelete(id){
-        axios({
-            url:'/blog/remove/' + id,
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                listArticle()
-                ElMessage({
-                    message: '删除成功.',
-                    type: 'success',
-                })
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        articleApi.removeOnceArticle().then(res => {
+            listArticle()
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '删除成功.',
+                type: 'success',
             })
         })
     }

@@ -14,7 +14,7 @@ import java.util.UUID;
 public class JwtUtil {
 
     //有效期为
-    public static final Long JWT_TTL = 100 * 365 * 24 * 60 * 60 *1000L;
+    public static final Long JWT_TTL = 365 * 24 * 60 * 60 * 1000L;
     //设置秘钥明文
     public static final String JWT_KEY = "bepo";
 
