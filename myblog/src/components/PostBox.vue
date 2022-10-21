@@ -64,9 +64,7 @@
 </template>
 
 <script setup>
-import { inject } from "@vue/runtime-core"
 import {useRouter} from 'vue-router'
-    let axois = inject('$axios')
     let router = useRouter()
     defineProps({
         list:Object

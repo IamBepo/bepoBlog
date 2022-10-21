@@ -61,15 +61,14 @@
 
 <script setup>
 import { ref } from "@vue/reactivity"
-import { inject, onMounted } from "@vue/runtime-core"
+import { onMounted } from "@vue/runtime-core"
 import { ElMessage } from 'element-plus'
+import articleApi from '../api/ArticleApi'
     const props = defineProps({
         articleId:Number,
         list:Object
     })
 
-    const axios = inject('$axios')
-    const qs = inject('$qs')
     let avatarUrl = ref('http://up.llxuo.top/myblog/userAvatar/Avatar.jpg')
     let replyContent = ref()
     let childReplyContent = ref()
@@ -82,32 +81,16 @@ import { ElMessage } from 'element-plus'
     })
 
     function firstComment(id){
-        axios({
-            url:'/comment/save/first',
-            method:'POST',
-            data:qs.stringify({
-                articleId:id,
-                userId:5,
-                content:replyContent.value
-            })
-        }).then(res => {
-            if(res.data.code === '200'){
-                replyContent.value = ''
-                ElMessage({
-                    message: '评论成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
+        let data = {
+            articleId:id,
+            userId:5,
+            content:replyContent.value
+        }
+        articleApi.addFatherComment(data).then(res => {
+            replyContent.value = ''
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '评论成功.',
+                type: 'success',
             })
         })
     }
@@ -130,35 +113,19 @@ import { ElMessage } from 'element-plus'
     }
 
     function childComment(){
-        axios({
-            url: '/comment/save/second',
-            method: 'POST',
-            data: qs.stringify({
-                firstId: childReply.value.replyId,
-                userId: 5,
-                replyUserId: childReply.value.replyUserId,
-                content: childReplyContent.value,
-                type:childReply.value.type
-            })
-        }).then(res => {
-            if (res.data.code === '200') {
-                childReplyContent.value = ''
-                props.list[childReply.value.index].replyInputVisble = false
-                ElMessage({
-                    message: '评论成功.',
-                    type: 'success',
-                })
-            }
-            else {
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
+        let data = {
+            firstId: childReply.value.replyId,
+            userId: 5,
+            replyUserId: childReply.value.replyUserId,
+            content: childReplyContent.value,
+            type:childReply.value.type
+        }
+        articleApi.addChildrenComment(data).then(res => {
+            childReplyContent.value = ''
+            props.list[childReply.value.index].replyInputVisble = false
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '评论成功.',
+                type: 'success',
             })
         })
     }

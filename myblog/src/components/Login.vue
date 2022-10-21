@@ -81,9 +81,7 @@
 import { ref } from "@vue/reactivity";
 import { useStore } from "vuex";
 import {useRoute,useRouter} from 'vue-router'
-import axois from '../plugins/axios'
-import qs from 'qs'
-
+import userApi from '../api/UserApi'
     const store = useStore()
     const router = useRouter()
 
@@ -107,11 +105,7 @@ import qs from 'qs'
                 "userid":username.value,
                 "password":password.value,
         }
-        axois({
-            url:'/user/signIn',
-            method:'post',
-            data:qs.stringify(data),
-        }).then((res)=>{
+        userApi.signIn(data).then(res => {
             console.log(res.data)
             if(res.data.code === "200"){
                 localStorage.setItem('token',res.data.data.token)
@@ -125,31 +119,23 @@ import qs from 'qs'
             username.value = ''
             password.value = ''
             autoLogin.value = false
-        }).catch((error)=>{
-            console.log(error)
+            store.commit('loginVisbleJudge',false)
         })
-        store.commit('loginVisbleJudge',false)
     }
 
     function signUp(){
         let data = {
-                "username":username_up.value,
-                "password":password_up.value,
-                "email":email.value
+            "username":username_up.value,
+            "password":password_up.value,
+            "email":email.value
         }
-        axois({
-            url:'/user/signUp',
-            method:'post',
-            data:qs.stringify(data),
-        }).then((res)=>{
+        userApi.signUp(data).then(res => {
             console.log(res.data)
             username_up.value = ''
             password_up.value = ''
             email.value = ''
-        }).catch((error)=>{
-            console.log(error)
+            store.commit('loginVisbleJudge',false)
         })
-        store.commit('loginVisbleJudge',false)
     }
 
 </script>

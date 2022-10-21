@@ -43,8 +43,8 @@ import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { ElMessage } from 'element-plus'
-import axois from '../plugins/axios'
 import store from "../store";
+import articleApi from '../api/ArticleApi'
 
     const dialogImageUrl = ref([
         {
@@ -58,26 +58,10 @@ import store from "../store";
     ])
 
     const handleRemove = (file) => {
-        axois({
-            url:'blog/cover/remove/' + file.id,
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '删除成功.',
-                    type: 'success',
-                })
-            }
-            else{
-                ElMessage({
-                    message: '删除失败.',
-                    type: 'error',
-                })
-            }
-        }).catch(error => {
+        articleApi.removeOnceCover(file.id).then(res => {
             ElMessage({
-                message: '删除失败.',
-                type: 'error',
+                message: '删除成功.',
+                type: 'success',
             })
         })
     }
@@ -93,10 +77,7 @@ import store from "../store";
     }
 
     function listCover(){
-        axois({
-            url:'blog/cover/list',
-            method:'GET'
-        }).then(res => {
+        articleApi.getCoverList().then(res => {
             fileList.value = res.data.data
         })
     }

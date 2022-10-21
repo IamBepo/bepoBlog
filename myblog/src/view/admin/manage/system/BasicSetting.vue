@@ -71,17 +71,14 @@
 import { inject, onMounted, ref } from "@vue/runtime-core";
 import store from '../../../../store'
 import { ElMessage } from 'element-plus'
+import systemApi from '../../../../api/SystemApi'
+import ArticleApi from '../../../../api/ArticleApi'
 
-    const axios = inject('$axios')
-    const qs = inject('$qs')
     let shields = ref('')
 
     function saveBasicInfo(){
-        axios({
-            url:'system/update/info',
-            method:'POST',
-            data:qs.stringify(store.state.systemInfo)
-        }).then(res => {
+        let data = store.state.systemInfo
+        systemApi.updateBasicInfo(data).then(res => {
             ElMessage({
                 message: '保存成功.',
                 type: 'success',
@@ -90,49 +87,34 @@ import { ElMessage } from 'element-plus'
     }
 
     function getSystemInfo() {
-        axios({
-            url: '/system/get/info',
-            method: 'GET'
-        }).then(res => {
-            if (res.data.code === '200') {
-                store.commit('getSystemInfo', res.data.data)
+        systemApi.getSystemInfo().then(res => {
+            store.commit('getSystemInfo', res.data.data)
 
-                let $favicon = document.querySelector('link[rel="icon"]');
-                if ($favicon !== null) {
-                    $favicon.href = res.data.data.webLogo;
-                } else {
-                    $favicon = document.createElement("link");
-                    $favicon.rel = "icon";
-                    $favicon.href = res.data.data.webLogo;
-                    document.head.appendChild($favicon);
-                }
+            let $favicon = document.querySelector('link[rel="icon"]');
+            if ($favicon !== null) {
+                $favicon.href = res.data.data.webLogo;
+            } else {
+                $favicon = document.createElement("link");
+                $favicon.rel = "icon";
+                $favicon.href = res.data.data.webLogo;
+                document.head.appendChild($favicon);
             }
         })
     }
 
     function listShields(){
-        axios({
-            url: '/system/list/shields',
-            method: 'GET'
-        }).then(res => {
-            if (res.data.code === '200') {
-                shields.value = res.data.data
-            }
+        ArticleApi.getShieldsList().then(res => {
+            shields.value = res.data.data
         })
     }
 
     function saveShields(){
-        axios({
-            url: '/system/update/shields',
-            method: 'POST',
-            data:shields.value
-        }).then(res => {
-            if (res.data.code === '200') {
-                ElMessage({
-                    message: '保存成功.',
-                    type: 'success',
-                })
-            }
+        let data = shields.value
+        systemApi.updateShields(data).then(res => {
+            ElMessage({
+                message: '保存成功.',
+                type: 'success',
+            })
         })
     }
 

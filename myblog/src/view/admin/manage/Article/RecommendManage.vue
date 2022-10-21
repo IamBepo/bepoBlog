@@ -96,11 +96,10 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import { inject, onMounted } from "@vue/runtime-core";
+import { onMounted } from "@vue/runtime-core";
 import { ElMessage } from 'element-plus'
-
-    const qs = inject('$qs')
-    const axios = inject('$axios')
+import ArticleApi from "../../../../api/ArticleApi";
+import recommendApi from '../../../../api/RecommendApi'
     let recommendSelectVisble = ref(false)
     let powerVisible = ref(false)
     let exitInput = ref()
@@ -113,13 +112,8 @@ import { ElMessage } from 'element-plus'
     let addType = ref()
 
     function listNoListRecommend(){
-        axios({
-            url:'/recommend/list/no/list',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                selectList.value = res.data.data
-            }
+        recommendApi.getNoRecommendList().then(res => {
+            selectList.value = res.data.data
         })
     }
 
@@ -131,69 +125,24 @@ import { ElMessage } from 'element-plus'
 
     function addListRecommendFun(type){
         recommendSelectVisble.value = false
-        
-        axios({
-            url:type==='LIST'?'/recommend/save/list/' + selectFirstId.value:'/recommend/save/walk/'+ selectFirstId.value,
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '新增推荐成功.',
-                    type: 'success',
-                })
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        let data = selectFirstId.value
+        recommendApi.addArticleRecommend(type,data).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '新增推荐成功.',
+                type: 'success',
             })
         })
     }
 
     function listListRecommend(){
-        axios({
-            url:'/recommend/list/all/list',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                listRecommend.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        recommendApi.getRecommendList().then(res => {
+            listRecommend.value = res.data.data
         })
     }
 
     function listWalkRecommend(){
-        axios({
-            url:'/recommend/list/all/walk',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                walkRecommend.value = res.data.data
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        recommendApi.getWalkRecommend().then(res => {
+            walkRecommend.value = res.data.data
         })
     }
 
@@ -208,72 +157,36 @@ import { ElMessage } from 'element-plus'
     }
 
     function exitPower(){
-        axios({
-            url:'/recommend/update/power',
-            method:'POST',
-            data:qs.stringify({
-                recommentId:exitPowerId.value,
-                power:exitInput.value
-            })
-        }).then(res => {
-            exitInput.value = ''
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '修改权重成功.',
-                    type: 'success',
-                })
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        let data = {
+            recommentId:exitPowerId.value,
+            power:exitInput.value
+        }
+        recommendApi.updateArticlePower(data).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '修改权重成功.',
+                type: 'success',
             })
         })
         powerVisible.value = false
     }
 
     function handleDelete(row,type){
-        axios({
-            url:'/recommend/remove',
-            method:'POST',
-            data:qs.stringify({
-                id:row.id,
-                recommentId:row.recommendId,
-                type:type
-            })
-        }).then(res => {
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '删除成功.',
-                    type: 'success',
-                })
-            }else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
+        let data = {
+            id:row.id,
+            recommentId:row.recommendId,
+            type:type
+        }
+        recommendApi.removeArticleRecommend(data).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '删除成功.',
+                type: 'success',
             })
         })
     }
 
     function listNoWalkRecommend(){
-        axios({
-            url:'/recommend/list/no/walk',
-            method:'GET'
-        }).then(res => {
-            if(res.data.code === '200'){
-                selectList.value = res.data.data
-            }
+        recommendApi.getNoWalkRecommendList().then(res => {
+            selectList.value = res.data.data
         })
     }
 

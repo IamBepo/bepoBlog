@@ -17,9 +17,8 @@ import UserList from '../view/admin/manage/user/UserList.vue'
 import VisitHistory from '../view/admin/manage/user/VisitHistory.vue'
 import NotFind from '../view/404/404.vue'
 import ReadModel from '../view/read/ReadModel.vue'
-import qs from 'qs'
-import axios from '../plugins/axios'
 import { useStore } from "vuex";
+import systemApi from "../api/SystemApi";
 
 const router = createRouter({
     history:createWebHistory(),
@@ -77,46 +76,39 @@ router.beforeEach((to, from, next) => {
     }
 
     if (!to.matched.length) { // 当路由不存在的时候
-        axios({
-            url:'/user/authorization',
-            method:'POST',
-            data:qs.stringify({
-              token:localStorage.getItem('token')
-            })
-        }).then(res => {
-            if(res.data.code === '200'){
-                let dataRouter = res.data.data.routerList
-                console.log(res.data)
-                let headAdminRouter = [
-                  {
-                    path: dataRouter[0].path,
-                    name: dataRouter[0].name,
-                    component: routerComponents[dataRouter[0].component],
-                    mate: {
-                      title: dataRouter[0].title
-                    },
-                    children: dataRouter[0].nextRouter
-                  }
-                ]
-                headAdminRouter[0].children.forEach(item => {
-                    item.component = routerComponents[item.component]
-                    item.children = item.nextRouter
-                    item.children.forEach(childItem => {
-                        childItem.component = routerComponents[childItem.component]
-                    })
+        systemApi.getAuthorizationRouter(localStorage.getItem('token')).then(res => {
+            let dataRouter = res.data.data.routerList
+            console.log(res.data)
+            let headAdminRouter = [
+                {
+                path: dataRouter[0].path,
+                name: dataRouter[0].name,
+                component: routerComponents[dataRouter[0].component],
+                mate: {
+                    title: dataRouter[0].title
+                },
+                children: dataRouter[0].nextRouter
+                }
+            ]
+            headAdminRouter[0].children.forEach(item => {
+                item.component = routerComponents[item.component]
+                item.children = item.nextRouter
+                item.children.forEach(childItem => {
+                    childItem.component = routerComponents[childItem.component]
                 })
-                // store.commit('setAdminRouter',headAdminRouter)
-                headAdminRouter.forEach(item => {
-                    router.addRoute(item)
-                })
-            }
-            router.addRoute({
-                path: '/:pathMatch(.*)',
-                name:'404',
-                component: routerComponents['NotFind']
             })
-            next({ ...to, replace: true })
+            // store.commit('setAdminRouter',headAdminRouter)
+            headAdminRouter.forEach(item => {
+                router.addRoute(item)
+            })
         })
+
+        router.addRoute({
+            path: '/:pathMatch(.*)',
+            name:'404',
+            component: routerComponents['NotFind']
+        })
+        next({ ...to, replace: true })
     }else{
         next()
     }

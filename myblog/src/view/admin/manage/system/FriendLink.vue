@@ -51,68 +51,40 @@
 
 <script setup>
 import { ref } from "@vue/reactivity";
-import { inject, onMounted } from "@vue/runtime-core";
+import { onMounted } from "@vue/runtime-core";
 import { ElMessage } from 'element-plus'
+import systemApi from '../../../../api/SystemApi'
 
-    const axios = inject('$axios')
     let addVisible = ref(false)
     let nameInput = ref('')
     let urlInput = ref('')
     let friendList = ref()
 
     function addFun(){
-        axios({
-            url:'/system/save/friend',
-            method:'POST',
-            data:{
-                name:nameInput.value,
-                url:urlInput.value
-            }
-        }).then(res =>{
-            if(res.data.code === '200'){
-                addVisible.value = false
-                ElMessage({
-                    message: '新增友情链接成功.',
-                    type: 'success',
-                })
-            }
-        }).catch(error =>{
+        let data = {
+            name:nameInput.value,
+            url:urlInput.value
+        }
+        systemApi.addFriendLink(data).then(res => {
+            addVisible.value = false
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '新增友情链接成功.',
+                type: 'success',
             })
         })
     }
 
     function listFriend(){
-        axios({
-            url:'/system/list/friend',
-            method:'GET',
-        }).then(res => {
+        systemApi.getFriendKLinkList().then(res => {
             friendList.value = res.data.data
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
         })
     }
 
     function handleDelete(row){
-        axios({
-            url:'/system/remove/friend/' + row.id,
-            method:'GET',
-        }).then(res =>{
-            if(res.data.code === '200'){
-                ElMessage({
-                    message: '删除友情链接成功.',
-                    type: 'success',
-                })
-            }
-        }).catch(error =>{
+        systemApi.removeFriendLink(row.id).then(res => {
             ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
+                message: '删除友情链接成功.',
+                type: 'success',
             })
         })
     }

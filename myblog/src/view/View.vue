@@ -17,26 +17,20 @@ import {inject, onMounted, ref} from 'vue'
 import TopNav from '../components/TopNav.vue'
 import LastStatement from '../components/LastStatement.vue'
 import store from '../store'
-
-    const axios = inject('$axios')
+import systemApi from '../api/SystemApi'
 
     function getSystemInfo() {
-        axios({
-            url: '/system/get/info',
-            method: 'GET'
-        }).then(res => {
-            if (res.data.code === '200') {
-                store.commit('getSystemInfo', res.data.data)
+        systemApi.getBlogInfo().then(res => {
+            store.commit('getSystemInfo', res.data.data)
 
-                let $favicon = document.querySelector('link[rel="icon"]');
-                if ($favicon !== null) {
-                    $favicon.href = res.data.data.webLogo;
-                } else {
-                    $favicon = document.createElement("link");
-                    $favicon.rel = "icon";
-                    $favicon.href = res.data.data.webLogo;
-                    document.head.appendChild($favicon);
-                }
+            let $favicon = document.querySelector('link[rel="icon"]');
+            if ($favicon !== null) {
+                $favicon.href = res.data.data.webLogo;
+            } else {
+                $favicon = document.createElement("link");
+                $favicon.rel = "icon";
+                $favicon.href = res.data.data.webLogo;
+                document.head.appendChild($favicon);
             }
         })
     }

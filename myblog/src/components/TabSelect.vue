@@ -16,28 +16,12 @@
 <script setup>
 import { ref } from "@vue/reactivity"
 import { onMounted } from "@vue/runtime-core"
-import axois from '../plugins/axios'
+import articleApi from '../api/ArticleApi'
 import store from "../store";
 
     function listTab(){
-        axois({
-            url:'/blog/tab/list',
-            method:'GET'
-        }).then(res=>{
-            if(res.data.code === '200'){
-                store.commit('tabSelected',res.data.data)
-            }
-            else{
-                ElMessage({
-                    message: '网络似乎出现了问题.',
-                    type: 'error',
-                })
-            }
-        }).catch(error =>{
-            ElMessage({
-                message: '网络似乎出现了问题.',
-                type: 'error',
-            })
+        articleApi.getTabList().then(res => {
+            store.commit('tabSelected',res.data.data)
         })
     }
 

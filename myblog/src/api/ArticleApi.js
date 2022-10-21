@@ -115,6 +115,17 @@ export default {
     },
 
     /**
+     * 获取封面
+     * @returns 
+     */
+    getCoverList(){
+        return axios({
+            url:'blog/cover/list',
+            method:'GET'
+        })
+    },
+
+    /**
      * 获取搜索文章
      * @param {*} data 
      * @returns 
@@ -293,6 +304,18 @@ export default {
     },
 
     /**
+     * 删除单个封面
+     * @param {*} id 
+     * @returns 
+     */
+    removeOnceCover(id) {
+        return axios({
+            url:'blog/cover/remove/' + id,
+            method:'GET'
+        })
+    },
+
+    /**
      * 更新分类内容
      * @param {*} data 
      * @returns 
@@ -352,7 +375,33 @@ export default {
     addLabel(data){
         return axios({
             url:'/blog/tab/save',
-            method:'post',
+            method:'POST',
+            data: qs.stringify(data)
+        })
+    },
+
+    /**
+     * 新增父评论
+     * @param {*} data 
+     * @returns 
+     */
+    addFatherComment(data) {
+        return axios({
+            url:'/comment/save/first',
+            method:'POST',
+            data: qs.stringify(data)
+        })
+    },
+
+    /**
+     * 新增子评论
+     * @param {*} data 
+     * @returns 
+     */
+    addChildrenComment(data) {
+        return axios({
+            url: '/comment/save/second',
+            method: 'POST',
             data: qs.stringify(data)
         })
     }
