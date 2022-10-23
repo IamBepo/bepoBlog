@@ -10,7 +10,7 @@ export default {
     signIn(data){
         return axios({
             url:'/user/signIn',
-            method:'post',
+            method:'POST',
             data:qs.stringify(data)
         })
     },
@@ -23,8 +23,19 @@ export default {
     signUp(data) {
         return axios({
             url:'/user/signUp',
-            method:'post',
+            method:'POST',
             data:qs.stringify(data)
+        })
+    },
+
+    /**
+     * 获取所有用户信息
+     * @returns 
+     */
+    getUserInfoList(){
+        return axios({
+            url:'/user/list/info',
+            method:'GET',
         })
     }
 }

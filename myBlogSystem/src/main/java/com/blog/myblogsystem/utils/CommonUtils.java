@@ -20,7 +20,7 @@ public class CommonUtils {
 
     public static List<BlogRouterVO> getChildRouter(BlogRouterVO father , List<BlogRouterVO> allRouter) {
         List<BlogRouterVO> children = allRouter.stream()
-                .filter(item -> item.getFatherId() == father.getId())
+                .filter(item -> item.getFatherId().equals(father.getId()))
                 .map(item -> {
                     item.setNextRouter(getChildRouter(item, allRouter));
                     return item;

@@ -39,4 +39,9 @@ public class UserController {
         return new JsonResult(userService.logOnAuthorization(token),CodeConstants.CODE_200);
     }
 
+    @RequestMapping("/list/info")
+    public JsonResult listUserInfo(){
+        return new JsonResult(userService.listUserInfo(),CodeConstants.CODE_200);
+    }
+
 }

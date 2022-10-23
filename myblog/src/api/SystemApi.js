@@ -11,7 +11,9 @@ export default {
         return axios({
             url:'/user/authorization',
             method:'POST',
-            data:qs.stringify(data)
+            data:qs.stringify({
+                token:data
+            })
         })
     },
 

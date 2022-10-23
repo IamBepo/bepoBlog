@@ -11,7 +11,7 @@ const axois = Axios.create({
 axois.interceptors.request.use(config => {
 	let token = localStorage.getItem('token')
 	if (token) {
-		config.headers['Authorization'] = token // 让每个请求携带自定义token
+		config.headers['token'] = token // 让每个请求携带自定义token
 	}
 	return config
 }, error => {

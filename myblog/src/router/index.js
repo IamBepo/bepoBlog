@@ -78,7 +78,7 @@ router.beforeEach((to, from, next) => {
     if (!to.matched.length) { // 当路由不存在的时候
         systemApi.getAuthorizationRouter(localStorage.getItem('token')).then(res => {
             let dataRouter = res.data.data.routerList
-            console.log(res.data)
+            console.log(dataRouter)
             let headAdminRouter = [
                 {
                 path: dataRouter[0].path,
@@ -101,14 +101,13 @@ router.beforeEach((to, from, next) => {
             headAdminRouter.forEach(item => {
                 router.addRoute(item)
             })
+            router.addRoute({
+                path: '/:pathMatch(.*)',
+                name:'404',
+                component: routerComponents['NotFind']
+            })
+            next({ ...to, replace: true })
         })
-
-        router.addRoute({
-            path: '/:pathMatch(.*)',
-            name:'404',
-            component: routerComponents['NotFind']
-        })
-        next({ ...to, replace: true })
     }else{
         next()
     }

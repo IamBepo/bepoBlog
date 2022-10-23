@@ -28,6 +28,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
+        log.info("token值："+token);
         Claims claims = null;
         try {
             claims = JwtUtil.parseJWT(token);
@@ -35,10 +36,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             throw new RuntimeException("token错误");
         }
         String id = claims.getSubject();
-        UserCustomDetail userCustomDetail = new UserCustomDetail(new UserLoginDTO(Integer.parseInt(id)), null);
+/*        UserCustomDetail userCustomDetail = new UserCustomDetail(new UserLoginDTO(Integer.parseInt(id)), null);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userCustomDetail, null, userCustomDetail.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);*/
         filterChain.doFilter(request,response);
     }
 }

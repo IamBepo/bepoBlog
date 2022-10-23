@@ -2,13 +2,14 @@ package com.blog.myblogsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.myblogsystem.constants.CodeConstants;
-import com.blog.myblogsystem.mapper.UserMapper;
+import com.blog.myblogsystem.mapper.*;
+import com.blog.myblogsystem.pojo.dto.PowerRoleDTO;
 import com.blog.myblogsystem.pojo.dto.UserInfoDTO;
 import com.blog.myblogsystem.pojo.dto.UserLoginDTO;
 import com.blog.myblogsystem.exception.LoginException;
-import com.blog.myblogsystem.mapper.UserInfoMapper;
-import com.blog.myblogsystem.mapper.UserLoginMapper;
+import com.blog.myblogsystem.pojo.dto.UserRoleDTO;
 import com.blog.myblogsystem.pojo.vo.BlogRouterVO;
+import com.blog.myblogsystem.pojo.vo.UserInfoVO;
 import com.blog.myblogsystem.pojo.vo.UserVO;
 import com.blog.myblogsystem.result.JsonResult;
 import com.blog.myblogsystem.service.UserService;
@@ -35,6 +36,10 @@ public class UserServiceImpl implements UserService {
     private UserLoginMapper userLoginMapper;
     @Autowired(required = false)
     private UserMapper userMapper;
+    @Autowired(required = false)
+    private PowerRoleMapper powerRoleMapper;
+    @Autowired(required = false)
+    private UserRoleMapper userRoleMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -88,6 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVO logOnAuthorization(String token) {
         try{
+            log.info(token);
             Claims claims = JwtUtil.parseJWT(token);
             String id = claims.getSubject();
 
@@ -100,5 +106,25 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<UserInfoVO> listUserInfo() {
+        List<UserLoginDTO> userLogin = userLoginMapper.selectList(null);
+        List<UserInfoVO> userInfo = new ArrayList<>();
+        userLogin.stream().forEach(item -> {
+            QueryWrapper<UserInfoDTO> u = new QueryWrapper<>();
+            u.eq("id",item.getId());
+            QueryWrapper<UserRoleDTO> ur = new QueryWrapper<>();
+            ur.eq("user_id",item.getId());
+            QueryWrapper<PowerRoleDTO> p = new QueryWrapper<>();
+            p.eq("id",userRoleMapper.selectOne(ur).getRoleId());
+            UserInfoVO userInfoVO = new UserInfoVO(item,
+                    userInfoMapper.selectOne(u),
+                    powerRoleMapper.selectOne(p)
+                    );
+            userInfo.add(userInfoVO);
+        });
+        return userInfo;
     }
 }

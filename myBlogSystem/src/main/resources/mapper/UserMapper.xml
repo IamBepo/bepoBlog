@@ -13,7 +13,7 @@
     <select id="getUserInfoAndRank" parameterType="integer" resultType="userVO">
         SELECT A.id,A.userid,A.name as user_name, A.email,A.avatar,C.`name` as role_name,C.role_key as role_key,C.rank as role_rank
         FROM `user_info` as A,`user_role` as B,`power_role` as C
-        where A.id = B.user_id and B.role_id = C.id
+        where A.id = #{userId} and B.role_id = C.id and B.user_id = #{userId}
     </select>
 
     <select id="listLessThanRankFatherRouter" parameterType="integer" resultType="blogRouterVO">

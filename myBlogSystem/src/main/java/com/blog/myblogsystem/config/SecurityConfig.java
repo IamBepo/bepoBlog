@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/signUp",
                         "/user/signIn",
                         "/user/*",
+                        "/user/*/*",
                         "/blog/*/*",
                         "/blog/*/*/*",
                         "/blog/*",
