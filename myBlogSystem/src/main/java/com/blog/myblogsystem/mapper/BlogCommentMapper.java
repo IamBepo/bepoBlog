@@ -13,6 +13,7 @@ public interface BlogCommentMapper {
     List<BlogSecondCommentVO> getSecondCommentByFirstId(Integer id); //获取Id评论对应二级评论
 
     List<BlogNewCommentVO> listNewComment(); //获取新评论
+    List<BlogNewCommentVO> listNewComment2(); //获取新评论
     List<BlogCommentManageVO> listFirstComent(); //获取所有一级评论
     List<BlogCommentManageVO> listSecondCommentByFirstId(Integer id); //根据一级评论id获取所有二级评论
 }

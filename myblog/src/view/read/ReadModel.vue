@@ -44,6 +44,8 @@ import { getCurrentInstance, inject, onMounted } from "@vue/runtime-core";
 import { ElMessage } from 'element-plus'
 import PostComment from '../../components/PostComment.vue'
 import articleApi from '../../api/ArticleApi'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
     const { proxy } = getCurrentInstance()
     const preview = ref()
@@ -62,6 +64,7 @@ import articleApi from '../../api/ArticleApi'
     function listArticle(id){
         articleApi.getArticleContent(id).then(res => {
             articleList.value = res.data.data
+            NProgress.done()
         })
     }
 
@@ -75,6 +78,7 @@ import articleApi from '../../api/ArticleApi'
     }
 
     onMounted:{
+        NProgress.start()
         listArticle(route.params.id)
         listComment(route.params.id)
     }

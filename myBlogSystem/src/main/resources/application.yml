@@ -2,6 +2,8 @@ server:
   port: 7777
 
 spring:
+  main:
+    banner-mode: off
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     #druid

@@ -44,6 +44,9 @@ import RightNewComment from '../../components/RightNewComment.vue';
 import { inject, onMounted, ref } from '@vue/runtime-core';
 import { ElMessage } from 'element-plus'
 import articleApi from '../../api/ArticleApi'
+import aggregationApi from '@/api/AggregationApi';
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
     let articleList = ref()
     let tabList = ref()
@@ -52,50 +55,66 @@ import articleApi from '../../api/ArticleApi'
     let walkRecommendList = ref()
     let shieldsList = ref()
 
-    function listArticle(){
-        articleApi.getArticleList().then(res => {
-            articleList.value = res.data.data
-        })
-    }
+    // function listArticle(){ 
+    //     articleApi.getArticleList().then(res => {
+    //         articleList.value = res.data.data
+    //     })
+    // }
 
-    function listTab(){
-        articleApi.getTabList().then(res => {
-            tabList.value = res.data.data
-        })
-    }
+    // function listTab(){
+    //     articleApi.getTabList().then(res => {
+    //         tabList.value = res.data.data
+    //     })
+    // }
 
-    function listNewComment(){
-        articleApi.getNewCommentList().then(res => {
-            newCommentList.value = res.data.data
-        })
-    }
+    // function listNewComment(){
+    //     articleApi.getNewCommentList().then(res => {
+    //         newCommentList.value = res.data.data
+    //     })
+    // }
 
-    function listListRecommend(){
-        articleApi.getRecommendList().then(res => {
-            listRecommendList.value = res.data.data
-        })
-    }
+    // function listListRecommend(){
+    //     articleApi.getRecommendList().then(res => {
+    //         listRecommendList.value = res.data.data
+    //     })
+    // }
 
-    function listWalkRecommend(){
-        articleApi.getWalkRecommendList().then(res => {
-            walkRecommendList.value = res.data.data
-        })
-    }
+    // function listWalkRecommend(){
+    //     articleApi.getWalkRecommendList().then(res => {
+    //         walkRecommendList.value = res.data.data
+    //     })
+    // }
 
-    function listShields(){
-        articleApi.getShieldsList().then(res => {
-            shieldsList.value = res.data.data
+    // function listShields(){
+    //     articleApi.getShieldsList().then(res => {
+    //         shieldsList.value = res.data.data
+    //     })
+    // }
+
+    function home(){
+        aggregationApi.getHomeShow().then(res => {
+            let home = res.data.data
+            articleList.value = home.article
+            tabList.value = home.tab
+            newCommentList.value = home.newComment
+            listRecommendList.value = home.listRecommend
+            walkRecommendList.value = home.walkRecommend
+            shieldsList.value = home.shields
+            NProgress.done()
         })
+
     }
 
 
     onMounted:{
-        listArticle()
-        listTab()
-        listNewComment()
-        listListRecommend()
-        listWalkRecommend()
-        listShields()
+        NProgress.start()
+        // listArticle()
+        // listTab()
+        // listNewComment()
+        // listListRecommend()
+        // listWalkRecommend()
+        // listShields()
+        home()
     }
 
 </script>
@@ -109,10 +128,11 @@ import articleApi from '../../api/ArticleApi'
     .LContainer {
         width: 890px;
         padding: 0 20px;
-        
+        min-width: 890px;
     }
     .RContainer {
-        width: 16%;
+        width: 290px;
+        min-width: 290px;
     }
     ::v-deep .el-pagination.is-background .el-pager li{
         background-color: #ededed;

@@ -8,6 +8,22 @@
         id,first_id,user_id,reply_user_id,
         content,update_time,deleted,type
     </sql>
+    
+    <resultMap id="commentDetail" type="com.blog.myblogsystem.pojo.vo.BlogNewCommentVO">
+        <result property="id" column="id"/>
+        <result property="articleId" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="userId" column="user_id"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="userInfo" javaType="com.blog.myblogsystem.pojo.dto.UserInfoDTO">
+            <result property="id" column="user_id"/>
+            <result property="userid" column="userid"/>
+            <result property="name" column="name"/>
+            <result property="email" column="email"/>
+            <result property="avatar" column="avatar"/>
+        </association>
+    </resultMap>
 
     <select id="getFirstCommentByArticleId" parameterType="integer" resultType="blogCommentVO">
         select id,user_id,content,update_time
@@ -22,10 +38,17 @@
     </select>
 
     <select id="listNewComment" resultType="blogNewCommentVO">
-        select A.id,A.article_id,B.title,A.user_id,A.content,A.update_time
-        from `blog_comment_first` as A,`blog_body` as B
-        where A.deleted = 0 and A.article_id = B.id
+        select A.id,A.article_id,B.title,A.user_id,A.content,A.update_time,C.userid,C.name,C.email,C.avatar
+        from `blog_comment_first` as A,`blog_body` as B,`user_info` as C
+        where A.deleted = 0 and A.article_id = B.id and A.user_id = C.id
         limit 5
+    </select>
+
+    <select id="listNewComment2" resultMap="commentDetail">
+        select A.id,A.article_id,B.title,A.user_id,A.content,A.update_time,C.userid,C.name,C.email,C.avatar
+        from `blog_comment_first` as A,`blog_body` as B,`user_info` as C
+        where A.deleted = 0 and A.article_id = B.id and A.user_id = C.id
+            limit 5
     </select>
 
     <select id="listFirstComent" resultType="blogCommentManageVO">

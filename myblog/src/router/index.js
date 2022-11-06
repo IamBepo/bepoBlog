@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
             headAdminRouter.forEach(item => {
                 router.addRoute(item)
             })
-            router.addRoute({
+            router.addRoute({ 
                 path: '/:pathMatch(.*)',
                 name:'404',
                 component: routerComponents['NotFind']

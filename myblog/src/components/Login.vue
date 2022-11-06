@@ -31,10 +31,10 @@
                         </template>
                     </el-input>
                 </div>
-                <div style="display: flex;align-items: center;">
+                <!-- <div style="display: flex;align-items: center;">
                     <div style="font-size: 16px;color: #4f6262;padding-right: 5px;">自动登录</div>
                     <el-switch v-model="autoLogin" />
-                </div>
+                </div> -->
                 <div style="padding-top: 10px;text-align: center;">
                     <el-button type="primary" style="width: 100%;" size="large" @click="signIn">登录</el-button>
                 </div>
@@ -102,8 +102,8 @@ import userApi from '../api/UserApi'
 
     function signIn(){
         let data = {
-                "userid":username.value,
-                "password":password.value,
+            "userid":username.value,
+            "password":password.value,
         }
         userApi.signIn(data).then(res => {
             console.log(res.data)
