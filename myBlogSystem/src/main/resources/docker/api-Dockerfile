@@ -1,0 +1,6 @@
+FROM openjdk:8-alpine
+MAINTAINER Bepo "1132131298@qq.com"
+ADD app.jar app.jar
+EXPOSE 7777
+ENV LANG C.UTF-8
+ENTRYPOINT ["java","-jar","app.jar","--spring.profiles.active=dev"]

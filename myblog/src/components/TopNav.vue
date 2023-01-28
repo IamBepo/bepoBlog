@@ -107,8 +107,20 @@ export default {
 
 
         function searchFun() {
-            console.log(searchValue.value);
-            searchValue.value = ""
+            if(searchValue.value) {
+                router.push({
+                    name:'search',
+                    query:{
+                        keyWord:searchValue.value
+                    }
+                })
+                searchValue.value = ""
+            }else {
+                ElMessage({
+                    message: '未输入搜索内容.',
+                    type: 'error',
+                })
+            }
         }
 
         function logOut() {

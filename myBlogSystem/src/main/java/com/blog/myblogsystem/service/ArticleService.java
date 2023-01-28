@@ -35,6 +35,7 @@ public interface ArticleService {
     List<BlogArticleManageVO> listAritcleManage(); //获取后台管理文章列表
     List<BlogArticleManageVO> listArticleBySearchTitle(String content); //搜索文章-根据标题
     List<BlogAritcleHomeVO> listArticleHome(); //获取首页文章展示列表
+    List<BlogAritcleHomeVO> listSearchArticle(String key); // 关键字(标题、标签、分类)搜索文章
     BlogArticleDetailVO listArticleDetail(int id); //获取文章内容及关联信息
     void removeArticleById(int id); //删除指定id文章
     void removeArticleByIdArr(List<Integer> arrId); //删除批量id文章

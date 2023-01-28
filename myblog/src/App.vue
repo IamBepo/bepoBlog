@@ -30,7 +30,7 @@ import systemApi from '@/api/SystemApi'
 
 <template>
   <div :style="[{ minWidth: !isDeviceMobile() ? '890px' : 0 }]">
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
   </div>
 </template>
 

@@ -52,4 +52,15 @@
         FROM `blog_body` as A,`blog_sort` as B
         where A.sort_id = B.id and A.id = #{id}
     </select>
+
+    <select id="listSearchArticle" resultType="blogAritcleHomeVO" parameterType="string">
+        select A.id,A.title,D.`name` as 'sort_name',A.tab_id as 'blog_tab_id',C.url as 'blog_cover',A.update_time,A.view_count,A.comment_count,A.`status`,A.top_status
+        from blog_body as A,blog_cover as C,blog_sort as D
+        where
+          A.cover_id = C.id
+            and A.sort_id = D.id
+              and title like concat('%',#{key},'%')
+                or exists (select id from blog_sort as B where name like concat('%',#{key},'%') and A.sort_id = B.id)
+                    or find_in_set((select id from blog_tab where name = #{key}), tab_id)
+    </select>
 </mapper>

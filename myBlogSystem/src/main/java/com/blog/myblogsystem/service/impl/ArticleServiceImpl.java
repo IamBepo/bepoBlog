@@ -20,7 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -251,5 +255,22 @@ public class ArticleServiceImpl implements ArticleService {
         queryWrapper.in("id",tabId);
         blog.setBlogTab(blogTabMapper.selectList(queryWrapper));
         return blog;
+    }
+
+    @Override
+    public List<BlogAritcleHomeVO> listSearchArticle(String key) {
+        List<BlogAritcleHomeVO> article = blogBodyMapper.listSearchArticle(key);
+        List<BlogTabDTO> tab = blogTabMapper.selectList(null);
+        Map<Integer, BlogTabDTO> tabMap = tab.stream().collect(Collectors.toMap(BlogTabDTO::getId, Function.identity()));
+        article.forEach(item -> CompletableFuture.supplyAsync(() -> {
+            String[] split = item.getBlogTabId().split(",");
+            List<BlogTabDTO> tabTemp = new ArrayList<>();
+            for(String sItem : split){
+                tabTemp.add(tabMap.get(Integer.parseInt(sItem)));
+            }
+            item.setBlogTab(tabTemp);
+            return null;
+        }));
+        return article;
     }
 }

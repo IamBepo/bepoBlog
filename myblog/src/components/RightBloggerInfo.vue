@@ -5,15 +5,15 @@
         </div>
         <div style="display: flex;justify-content: center;margin:0 0 10px 0;">
             <div style="border-right: solid 1px #ffdcdc;padding-right: 10px;font-size: 25px;">
-                <div style="color: #fcffeb;"><em>5</em></div>
+                <div style="color: #fcffeb;"><em>{{countList.articleCount}}</em></div>
                 <div style="font-size: 16px;color: #d5ffc7;">文章</div>
             </div>
             <div style="padding-left: 10px;font-size: 25px;border-right: solid 1px #ffdcdc;padding-right: 10px;">
-                <div style="color: #fcffeb;"><em>5</em></div>
+                <div style="color: #fcffeb;"><em>{{countList.sortCount}}</em></div>
                 <div style="font-size: 16px;color: #d5ffc7;">分类</div>
             </div>
             <div style="padding-left: 10px;font-size: 25px;">
-                <div style="color: #fcffeb;"><em>5</em></div>
+                <div style="color: #fcffeb;"><em>{{countList.tagCount}}</em></div>
                 <div style="font-size: 16px;color: #d5ffc7;">标签</div>
             </div>
         </div>
@@ -28,7 +28,8 @@
 
 <script setup>
     defineProps({
-        list:Object
+        list:Object,
+        countList:Object
     })
 </script>
 

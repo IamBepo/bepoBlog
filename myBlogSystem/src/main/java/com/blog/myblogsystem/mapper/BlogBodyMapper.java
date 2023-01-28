@@ -31,6 +31,7 @@ public interface BlogBodyMapper extends BaseMapper<BlogBodyDTO> {
     List<BlogArticleManageVO> listArticleManage(); //获取后台管理文章
     List<BlogArticleManageVO> listArticleManageBySearch(String content); //获取后台搜索文章
     List<BlogAritcleHomeVO> listArticleHomeBaseInfo(); //获取首页文章列表基本信息
+    List<BlogAritcleHomeVO> listSearchArticle(String key); // 获取搜索文章
     BlogArticleDetailVO listArticleDetail(int id); //获取文章内容及关联信息
 }
 

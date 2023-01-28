@@ -17,6 +17,7 @@ import UserList from '../view/admin/manage/user/UserList.vue'
 import VisitHistory from '../view/admin/manage/user/VisitHistory.vue'
 import NotFind from '../view/404/404.vue'
 import ReadModel from '../view/read/ReadModel.vue'
+import SearchModel from '../view/search/SearchModel.vue'
 import { useStore } from "vuex";
 import systemApi from "../api/SystemApi";
 
@@ -38,15 +39,23 @@ const router = createRouter({
                     name:'about',
                     component:AboutBlogger
                 },
-                {
-                    path:'/readmodel',
-                    name:'read',
-                    component:ReadModel
-                },
+                // {
+                //     path:'/readmodel',
+                //     name:'read',
+                //     component:ReadModel
+                // },
                 {
                     path:'/read/:id',
                     name:'readId',
                     component:ReadModel
+                },
+                {
+                    path:'/search',
+                    name:'search',
+                    component:SearchModel,
+                    meta:{
+                        keepalive:false
+                    }
                 }
             ]
         },

@@ -175,6 +175,19 @@ export default {
         })
     },
 
+    /**
+     * 获取搜索文章
+     * @param {*} data 
+     * @returns 
+     */
+    getSearchArticle(data) {
+        return axios({
+            url:'/blog/list/search',
+            method:'POST',
+            data:qs.stringify(data)
+        })
+    },
+
 
     /**
      * 更新文章可视状态

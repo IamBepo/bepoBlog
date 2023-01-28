@@ -4,9 +4,9 @@
             <div style="margin:0 0 10px 0;">
                 <TopSwiper :list="walkRecommendList"></TopSwiper>
             </div>
-            <div>
+            <!-- <div>
                 <Propagate></Propagate>
-            </div>
+            </div> -->
             <div>
                 <PostBox v-for="item in articleList" :key="item.id" :list="item"></PostBox>
             </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="RContainer">
             <div>
-                <RightBloggerInfo :list="shieldsList"></RightBloggerInfo>
+                <RightBloggerInfo :list="shieldsList" :countList="countList"></RightBloggerInfo>
             </div>
             <div style="padding-top: 10px;">
                 <RightOtherInfo :list="tabList"></RightOtherInfo>
@@ -54,6 +54,11 @@ import 'nprogress/nprogress.css'
     let listRecommendList = ref()
     let walkRecommendList = ref()
     let shieldsList = ref()
+    let countList = ref({
+        articleCount:0,
+        sortCount:0,
+        tagCount:0
+    })
 
     // function listArticle(){ 
     //     articleApi.getArticleList().then(res => {
@@ -100,6 +105,7 @@ import 'nprogress/nprogress.css'
             listRecommendList.value = home.listRecommend
             walkRecommendList.value = home.walkRecommend
             shieldsList.value = home.shields
+            countList.value = home.count
             NProgress.done()
         })
 

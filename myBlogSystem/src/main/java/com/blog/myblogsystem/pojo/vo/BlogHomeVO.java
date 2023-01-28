@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -20,4 +21,5 @@ public class BlogHomeVO {
     private List<BlogListRecommendVO> listRecommend;
     private List<BlogWalkRecommendVO> walkRecommend;
     private List<BlogShieldsDTO> shields;
+    private Map<String,Integer> count;
 }

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import {inject, onMounted, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import TopNav from '../components/TopNav.vue'
 import LastStatement from '../components/LastStatement.vue'
 import store from '../store'
@@ -38,6 +38,7 @@ import systemApi from '../api/SystemApi'
     onMounted:{
         getSystemInfo()
     }
+
 </script>
 
 <style scoped>

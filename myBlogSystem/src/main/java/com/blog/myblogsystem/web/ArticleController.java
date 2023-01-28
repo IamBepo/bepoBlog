@@ -312,4 +312,14 @@ public class ArticleController {
         return new JsonResult<>(articleService.listArticleDetail(id),CodeConstants.CODE_200);
     }
 
+    /**
+     * 关键字搜索文章
+     * @param key
+     * @return
+     */
+    @RequestMapping("/list/search")
+    public JsonResult<List<BlogAritcleHomeVO>> listSearchArticle(String key) {
+        return new JsonResult<>(articleService.listSearchArticle(key),CodeConstants.CODE_200);
+    }
+
 }

@@ -6,16 +6,17 @@ import com.blog.myblogsystem.pojo.dto.BlogShieldsDTO;
 import com.blog.myblogsystem.pojo.dto.BlogTabDTO;
 import com.blog.myblogsystem.pojo.vo.*;
 import com.blog.myblogsystem.service.AggregationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AggregationServiceImpl implements AggregationService {
     @Autowired(required = false)
     private BlogBodyMapper blogBodyMapper;
@@ -46,14 +47,21 @@ public class AggregationServiceImpl implements AggregationService {
         //盾牌处理
         List<BlogShieldsDTO> shieldsList = blogShieldsMapper.selectList(null);
 
-        list.forEach(item -> {
+        list.forEach(item -> CompletableFuture.supplyAsync(() -> {
             String[] split = item.getBlogTabId().split(",");
             List<BlogTabDTO> tabTemp = new ArrayList<>();
             for(String sItem : split){
                 tabTemp.add(tabMap.get(Integer.parseInt(sItem)));
             }
             item.setBlogTab(tabTemp);
-        });
+            return null;
+        }));
+
+        //TODO 未查询分类
+        Map<String, Integer> count = new HashMap<>(3);
+        count.put("articleCount",list.size());
+        count.put("sortCount",100);
+        count.put("tagCount",tabList.size());
 
         return BlogHomeVO.builder()
                 .article(list)
@@ -62,6 +70,7 @@ public class AggregationServiceImpl implements AggregationService {
                 .walkRecommend(walkRecommendList)
                 .listRecommend(listRecommendList)
                 .shields(shieldsList)
+                .count(count)
                 .build();
     }
 }
