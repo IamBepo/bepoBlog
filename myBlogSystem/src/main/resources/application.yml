@@ -9,9 +9,9 @@ spring:
     #druid
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://sh-cynosdbmysql-grp-j2y4yak0.sql.tencentcdb.com:24444/blog?useSSL=true&characterEncoding=UTF-8&useUnicode=true&serverTimezone=GMT%2B8
+      url: #你的url
       username: root
-      password: 11321312aA
+      password: #密码
       initial-size: 50 #初始化连接数
       min-idle: 50 #最小
       max-wait: 2500
@@ -47,8 +47,8 @@ mybatis-plus:
 
 #七牛云
 qiniu:
-  accessKey: 87FqJZUZKqirv7b8k2trW7G0ejRmOtk8K1UZFcpE
-  accessSecretKey: YBBjPWgDCaXY488E0yb2rkCeE2oCP8IkBsSYHVc9
-  url: http://up.llxuo.top/
-  bucket: biubiucomic
-  catalogue: myblog/coverImg/
+  accessKey: #ak
+  accessSecretKey: #sk
+  url: #url
+  bucket: #bucket
+  catalogue: #目录
