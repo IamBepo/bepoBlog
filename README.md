@@ -34,12 +34,12 @@
 
 ### 效果展示
 
-![image-20230128202052781](https://up.llxuo.top/git/202301282124186.png)
+![image-20230128202052781](https://github.com/IamBepo/bepoBlog/blob/master/img/1.png)
 
-![image-20230128202358555](https://up.llxuo.top/git/202301282125157.png)
+![image-20230128202358555](https://github.com/IamBepo/bepoBlog/blob/master/img/2.png)
 
-![image-20230128202409199](https://up.llxuo.top/git/202301282125649.png)
+![image-20230128202409199](https://github.com/IamBepo/bepoBlog/blob/master/img/3.png)
 
-![image-20230128202417978](https://up.llxuo.top/git/202301282125282.png)
+![image-20230128202417978](https://github.com/IamBepo/bepoBlog/blob/master/img/4.png)
 
-![image-20230128202430532](https://up.llxuo.top/git/202301282125648.png)
+![image-20230128202430532](https://github.com/IamBepo/bepoBlog/blob/master/img/5.png)
